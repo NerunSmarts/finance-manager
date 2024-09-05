@@ -1,0 +1,14 @@
+{
+  "name": "finance-manager-project",
+  "version": "1.0.0",
+  "description": "a small finance manager written for a semester long software engineering project",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Jonah Gjersvig",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^32.0.2"
+  }
+}
