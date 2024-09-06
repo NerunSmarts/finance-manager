@@ -1,15 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="">
   <head>
-    <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <title>Hello World!</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="./stylesheets/nav.css">
+    <title></title>
   </head>
   <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
+    <main>
+      <aside>
+      <div class="nav-bar-container">
+        <ul class="nav-bar">
+          <li><object class="nav-icon" data="./src/icons/bulb-sharp.svg"></object><a>Dashboard</a></li>
+          <li><object class="nav-icon" data="./src/icons/trending-down-sharp.svg"></object><a>Expenses</a></li>
+          <li><object class="nav-icon" data="./src/icons/cash-sharp.svg"></object><a>Income</a></li>
+          <li><object class="nav-icon" data="./src/icons/extension-puzzle-sharp.svg"></object><a>Extention</a></li>
+          <li><object class="nav-icon" data="./src/icons/settings-sharp.svg"></object><a>Settings</a></li>
+        </ul>
+        </div>
+      </aside>
+    </main>
   </body>
 </html>

@@ -1,0 +1,41 @@
+@font-face {
+    font-family: ltsr;
+    src: url(../src/fonts/LTSuperior-Regular.otf);
+}
+
+body {
+    margin: 0;
+}
+
+.nav-bar-container {
+    background: #282828;
+    width: 200px;
+    height: 100vh;
+}
+
+.nav-bar {
+    list-style-type: none;
+    margin: 0;
+}
+
+.nav-bar li a {
+    font-family: ltsr;
+    color: #c5c5c5;
+    font-size: 16px;
+}
+
+.nav-bar li {
+    padding: 3px;
+
+}
+
+
+.nav-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+    display: inline;
+    position: relative;
+    top: 4px;
+    filter: brightness(0) invert(1);
+}
