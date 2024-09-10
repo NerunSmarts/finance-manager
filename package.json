@@ -4,7 +4,8 @@
   "description": "a small finance manager written for a semester long software engineering project",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+      "start": "electron .",
+      "test": "echo \"it works probably\" && exit 1"
   },
   "author": "Jonah Gjersvig",
   "license": "MIT",
