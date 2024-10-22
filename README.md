@@ -19,7 +19,7 @@ In your CLI, cd into the `finance-electron-app-ui` and then run `npm start` and 
 
 ### to build:
 
-In your CLI, ensure you're in the project directory then run `npm run make` to build the app.
+In your CLI, ensure you're in the project directory then run `npm run make` to build the app. Make sure you build the React app first though.
 
 ### to run:
 
