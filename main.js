@@ -6,7 +6,7 @@ const createWindow = () => {
       height: 600
     })
   
-    win.loadFile('index.html')
+    win.loadURL('http://localhost:3000') // Load the React app, only for development so replace later!
   }
 
   app.whenReady().then(() => {
