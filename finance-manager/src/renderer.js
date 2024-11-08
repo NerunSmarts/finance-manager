@@ -27,5 +27,10 @@
  */
 
 import './index.css';
+import Chart from 'chart.js/auto';
 
-console.log('👋 This message is being logged by "renderer.js", included via webpack');
+console.log('nothing\'s died yet!');
+
+const { ipcRenderer } = require('electron');
+
+// use document.getElementById().addEventListener() to add interactivity!
