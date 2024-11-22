@@ -36,14 +36,23 @@ import settingsIcon from './icons/settings-sharp.svg';
 import  Chart  from 'chart.js/auto';
 const { ipcRenderer } = require('electron')
 
-var graphShowing = true;
+var currentPageIndex = 0;
+var pageList = ['addincome-pg', 'addexpenses-pg']; // final will be ['addincome-pg', 'addexpenses-pg', 'dashboard-pg', 'investments-pg', 'settings-pg']
 
-document.getElementById('dashButton').innerHTML = `<object data="${dashIcon}" class="nav-icon"></object><a>Dashboard</a>`;
-document.getElementById('incomeButton').innerHTML = `<object data="${incomeIcon}" class="nav-icon"></object><a>Income</a>`;
-document.getElementById('invButton').innerHTML = `<object data="${investIcon}" class="nav-icon"></object><a>Investments</a>`;
-document.getElementById('expButton').innerHTML = `<object data="${expenseIcon}" class="nav-icon"></object><a>Expenses</a>`;
-document.getElementById('settingsButton').innerHTML = `<object data="${settingsIcon}" class="nav-icon"></object><a>Settings</a>`;
+// Set up the navigation bar
+document.getElementById('dashButton').innerHTML = `<object data="${dashIcon}" class="nav-icon" id = "dashIconO"></object><a>Dashboard</a>`;
+document.getElementById('incomeButton').innerHTML = `<object data="${incomeIcon}" class="nav-icon" id = "incomeIconO" onclick = "this.incomeIButtonF()"></object><a>Income</a>`;
+document.getElementById('invButton').innerHTML = `<object data="${investIcon}" class="nav-icon" id = "investIconO"></object><a>Investments</a>`;
+document.getElementById('expButton').innerHTML = `<object data="${expenseIcon}" class="nav-icon" id = "expenseIconO" onclick = "this.expIButtonF()"></object><a>Expenses</a>`;
+document.getElementById('settingsButton').innerHTML = `<object data="${settingsIcon}" class="nav-icon" id = "settingsIconO"></object><a>Settings</a>`;
 
+//initialize a page to display
+for (let i in pageList) {
+    document.getElementById(pageList[i]).style.display = 'none';
+}
+document.getElementById('addincome-pg').style.display = 'block'; // default page for now
+
+// Graphing code
 (async function() {
     const data = [
       { year: 2010, count: 10 },
@@ -75,16 +84,34 @@ document.getElementById('settingsButton').innerHTML = `<object data="${settingsI
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
 
-document.getElementById('incomeButton').incomeButtonF = () => {
-    if (graphShowing){
-        document.getElementById('addincome-pg').style.display = 'none';
-        graphShowing = false;
-    } else {
-        document.getElementById('addincome-pg').style.display = 'block';
-        graphShowing = true;
+// page switching functionality
+function switchOnClick() {
+    for (let i in pageList) {
+        document.getElementById(pageList[i]).style.display = 'none';
     }
+    document.getElementById(pageList[currentPageIndex]).style.display = 'block';
 }
+document.getElementById('expButton').expButtonF = () => {
+    currentPageIndex = 1 - 1;  //temporarily set to 1-1 while waiting for pages
+    switchOnClick();
+}
+document.getElementById('expenseIconO').expIButtonF = () => {
+    currentPageIndex = 1 - 1;
+    switchOnClick();
+}
+document.getElementById('incomeButton').incomeButtonF = () => {
+    currentPageIndex = 2 - 1;
+    switchOnClick();
+}
+document.getElementById('incomeIconO').incomeIButtonF = () => {
+    currentPageIndex = 2 - 1;
+    switchOnClick();
+}
+document.getElementById('dashButton').addEventListener('click', () => {
+    console.log('dash clicked');
+});
 
+// inter-process communication test, will fix when we need data from the database.
 ipcRenderer.on('init-sync', (event, args) => {
   console.log(args)
 });

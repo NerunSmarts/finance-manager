@@ -72,12 +72,17 @@ img {
   display: inline;
 }
 
+.expense-dialog {
+  display: none;
+}
+
 @media screen and (max-width: 1080px) {
   img {
       position: relative;
       right: 18px;
   }
 }
+
 
 @media screen and (max-width: 980px) {
   img {
@@ -86,11 +91,6 @@ img {
   }
 }
 
-@media screen and (max-width: 900px) {
-  body {
-      overflow-x: scroll;
-  }
-}
 @media screen and (max-width: 780px) {
   img {
       position: relative;
@@ -111,9 +111,23 @@ img {
   }
 }
 
+
+
 body {
   overflow-x: hidden;
 }
+
+@media screen and (max-width: 900px) {
+  body {
+      overflow-x: scroll;
+  }
+
+}
+
+
+
+/* Add Income page */
+
 
 .addincome-pg {
   position: relative;
@@ -157,8 +171,63 @@ body {
       position: relative;
   }
 
+
   .addincome-pg .statistics h1 {
      text-align: left !important;;
   }
 
 }
+
+
+/* Add Expenses page */
+
+
+.addexpenses-pg {
+  position: relative;
+  margin-left: 15%;
+  left: 35px;
+  top: 40px;
+}
+
+.addexpenses-pg img {
+  width: 500px;
+  height: 150px;
+}
+
+.addexpenses-pg .statistics {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  margin-right: 100px;
+}
+
+.addexpenses-pg .statistics p {
+  position: relative;
+  left: 70px;
+}
+
+.finalexpenses-p {
+  position: relative;
+  top: 200px;
+  font-size: 28px;
+}
+
+
+.addexpenses-pg .statistics canvas {
+  border: 2px black solid;
+  width: 512px;
+  height: 300px;
+}
+
+@media screen and (max-width: 1380px) {
+  .addexpenses-pg .statistics {
+      position: relative;
+  }
+
+
+  .addexpenses-pg .statistics h1 {
+      text-align: left !important;;
+  }
+
+}
+
