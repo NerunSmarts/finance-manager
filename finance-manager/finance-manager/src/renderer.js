@@ -28,6 +28,9 @@
 
 import './index.css';
 import  Chart  from 'chart.js/auto';
+const { ipcRenderer } = require('electron')
+
+var graphShowing = true;
 
 (async function() {
     const data = [
@@ -41,7 +44,7 @@ import  Chart  from 'chart.js/auto';
     ];
   
     new Chart(
-      document.getElementById('incomevexpenses'),
+      document.getElementById('chart'),
       {
         type: 'bar',
         data: {
@@ -55,6 +58,21 @@ import  Chart  from 'chart.js/auto';
         }
       }
     );
+    
   })();
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
+
+document.getElementById('viewtoggle').addEventListener('click',()=>{
+    if(graphShowing){
+        document.getElementById('chart').style.display = 'none';
+        graphShowing = false;
+    }else{
+        document.getElementById('chart').style.display = 'block';
+        graphShowing = true;
+    }
+})
+
+ipcRenderer.on('init-sync', (event, args) => {
+  console.log(args)
+});

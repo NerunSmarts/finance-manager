@@ -1,4 +1,5 @@
 const rules = require('./webpack.rules');
+const webpack = require('webpack');
 
 rules.push({
   test: /\.css$/,
@@ -10,4 +11,12 @@ module.exports = {
   module: {
     rules,
   },
+   plugins: [
+    new webpack.ExternalsPlugin('commonjs', [
+        'electron',
+        'fs',
+        'path',
+        'node:events',
+    ])
+  ]
 };
