@@ -8,6 +8,7 @@ var dbExists = false;
 
 process.parentPort.on('message', (e) => {
     const [port] = e.ports;
+    console.log("got a port!");
     port.postMessage({ message: 'connect' });
     port.start();
     port.on('message', (message) => {

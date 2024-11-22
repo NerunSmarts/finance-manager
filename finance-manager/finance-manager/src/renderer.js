@@ -27,10 +27,22 @@
  */
 
 import './index.css';
+import dashIcon from './icons/bulb-sharp.svg';
+import incomeIcon from './icons/cash-sharp.svg';
+import investIcon from './icons/stats-chart-sharp.svg';
+import expenseIcon from './icons/trending-down-sharp.svg';
+import settingsIcon from './icons/settings-sharp.svg';
+
 import  Chart  from 'chart.js/auto';
 const { ipcRenderer } = require('electron')
 
 var graphShowing = true;
+
+document.getElementById('dashButton').innerHTML = `<object data="${dashIcon}" class="nav-icon"></object><a>Dashboard</a>`;
+document.getElementById('incomeButton').innerHTML = `<object data="${incomeIcon}" class="nav-icon"></object><a>Income</a>`;
+document.getElementById('invButton').innerHTML = `<object data="${investIcon}" class="nav-icon"></object><a>Investments</a>`;
+document.getElementById('expButton').innerHTML = `<object data="${expenseIcon}" class="nav-icon"></object><a>Expenses</a>`;
+document.getElementById('settingsButton').innerHTML = `<object data="${settingsIcon}" class="nav-icon"></object><a>Settings</a>`;
 
 (async function() {
     const data = [
@@ -44,7 +56,7 @@ var graphShowing = true;
     ];
   
     new Chart(
-      document.getElementById('chart'),
+      document.getElementById('incomeChart'),
       {
         type: 'bar',
         data: {
@@ -63,15 +75,15 @@ var graphShowing = true;
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
 
-document.getElementById('viewtoggle').addEventListener('click',()=>{
-    if(graphShowing){
-        document.getElementById('chart').style.display = 'none';
+document.getElementById('incomeButton').incomeButtonF = () => {
+    if (graphShowing){
+        document.getElementById('addincome-pg').style.display = 'none';
         graphShowing = false;
-    }else{
-        document.getElementById('chart').style.display = 'block';
+    } else {
+        document.getElementById('addincome-pg').style.display = 'block';
         graphShowing = true;
     }
-})
+}
 
 ipcRenderer.on('init-sync', (event, args) => {
   console.log(args)

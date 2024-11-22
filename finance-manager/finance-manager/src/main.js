@@ -43,7 +43,7 @@ app.whenReady().then(() => {
   
   databaseHandler.on('spawn', () => {
     databaseHandler.postMessage({ message: 'init' }, [port2]);
-    port1.on('message', (message) => {
+    port1.on('connect', (message) => {
       console.log("talking to database handler!")
     });
   });

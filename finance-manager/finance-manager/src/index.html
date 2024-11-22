@@ -1,16 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
   <head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
-
+    <meta charset="utf-8">
+    <title>Finance Manager</title>
   </head>
   <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
-    <div id="chartContainer">
-    <canvas id="chart"></canvas>
-    </div>
-    <button id="viewtoggle">Toggle Graph</button>
+    <header></header>
+    <main>
+      <div class="addincome-pg" id = "addincome-pg">
+        <img>
+        <p>Hourly salary (in $):</p>
+        <input></input><button>Update</button>
+        <p>Hours per day (approx):</p>
+        <input></input><button>Update</button>
+        <p>Days working per week (approx):</p>
+        <input></input><button>Update</button>
+        <p>Additional income this year (in $):</p>
+        <input></input><button>Update</button>
+
+
+        <div class="statistics" id = "statistics">
+          <canvas id = "incomeChart"></canvas>
+          <center><h1>Total income:</h1></center>
+          <p>Income per year:</p>
+          <p>Income per month:</p>
+          <p>Income per week:</p>
+          <p>Income per month:</p>
+          <p>Income per day:</p>
+        </div>
+
+        <center><p class="finalincome-p">Final income with expenses:</p></center>
+
+      </div>
+    <aside>
+      <div class="nav-bar-container">
+        <ul class="nav-bar">
+          <img src="#">
+          <li id = "dashButton"><object class="nav-icon" id="dashIcon"></object><p>Dashboard</p></li>
+          <li id = "expButton"><object class="nav-icon" id="expenseIcon"></object><p>Expenses</p></li>
+          <li id = "incomeButton" onclick = "this.incomeButtonF()"><object class="nav-icon" id="incomeIcon"></object><p>Income</p></li>
+          <li id = "invButton"><object class="nav-icon" id="investmentIcon"></object><p>Investments</p></li>
+          <li id = "settingsButton"><object class="nav-icon" id="settingsIcon"></object><p>Settings</p></li>
+        </ul>
+        </div>
+      </aside>
+
+
+
+
+
+  </main>
+    <footer></footer>
   </body>
 </html>
