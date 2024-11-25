@@ -7,9 +7,9 @@ also on gitlab! (for now)
 
 **This assumes you have node.js installed, if not, please install it from https://nodejs.org/**
 
-1. Starting inside the project directory, navigate to the last folder called "finance-manager", it should contain a folder called "src" using command prompt.    
+1. Starting inside the project directory, navigate to the last folder called "finance-manager", it should contain a folder called "src" using command prompt. (yes, we are aware that the folder structure is kind of broken. We'll fix it later, right now we're busy writing it still.)    
 
-2. Run `npm install` to install all dependencies from `package.json`   
+2. Run `npm install` once you're in the correct diectory to install all dependencies from `package.json`   
 
 3. Run the command `npm run start` to start the program, if you wish to start it without building.    
 
