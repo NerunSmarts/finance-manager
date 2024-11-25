@@ -167,7 +167,7 @@ body {
 }
 
 @media screen and (max-width: 1380px) {
-  .addincome-pg .statistics {
+  .addincome-pg .statistics {   /* do we need to fix this? It seems to make the chart overlap stuff */
       position: relative;
   }
 

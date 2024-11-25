@@ -39,6 +39,11 @@ const { ipcRenderer } = require('electron')
 var currentPageIndex = 0;
 var pageList = ['addincome-pg', 'addexpenses-pg']; // final will be ['addincome-pg', 'addexpenses-pg', 'dashboard-pg', 'investments-pg', 'settings-pg']
 
+// inter-process communication test, will fix when we need data from the database.
+ipcRenderer.on('init-sync', (event, args) => {
+  console.log(args)
+});
+
 // Set up the navigation bar
 document.getElementById('dashButton').innerHTML = `<object data="${dashIcon}" class="nav-icon" id = "dashIconO"></object><a>Dashboard</a>`;
 document.getElementById('incomeButton').innerHTML = `<object data="${incomeIcon}" class="nav-icon" id = "incomeIconO" onclick = "this.incomeIButtonF()"></object><a>Income</a>`;
@@ -54,7 +59,7 @@ document.getElementById('addincome-pg').style.display = 'block'; // default page
 
 // Graphing code
 (async function() {
-    const data = [
+    const data = [    //temporary until we have a method to fetch data from the database
       { year: 2010, count: 10 },
       { year: 2011, count: 20 },
       { year: 2012, count: 15 },
@@ -64,7 +69,7 @@ document.getElementById('addincome-pg').style.display = 'block'; // default page
       { year: 2016, count: 28 },
     ];
   
-    new Chart(
+    new Chart(      // temporary chart visualization until we can get IPC working
       document.getElementById('incomeChart'),
       {
         type: 'bar',
@@ -111,7 +116,3 @@ document.getElementById('dashButton').addEventListener('click', () => {
     console.log('dash clicked');
 });
 
-// inter-process communication test, will fix when we need data from the database.
-ipcRenderer.on('init-sync', (event, args) => {
-  console.log(args)
-});
