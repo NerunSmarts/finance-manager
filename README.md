@@ -5,4 +5,12 @@ also on gitlab! (for now)
 
 # how to build/run:
 
-google it. I'll write actual instructions later lol
+**This assumes you have node.js installed, if not, please install it from https://nodejs.org/**
+
+1. Starting inside the project directory, navigate to the last folder called "finance-manager", it should contain a folder called "src" using command prompt.    
+
+2. Run `npm install` to install all dependencies from `package.json`   
+
+3. Run the command `npm run start` to start the program, if you wish to start it without building.    
+
+4. If you wish to build, run `npm run make` to build the project, it should create a folder called `out` that contains your executable. 
