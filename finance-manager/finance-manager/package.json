@@ -36,6 +36,7 @@
   "dependencies": {
     "chart.js": "^4.4.6",
     "electron-squirrel-startup": "^1.0.1",
-    "sql.js": "^1.12.0"
+    "sql.js": "^1.12.0",
+    "python-shell": "^3.0.1"
   }
 }

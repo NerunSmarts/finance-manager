@@ -11,6 +11,8 @@ also on gitlab! (for now)
 
 2. Run `npm install` once you're in the correct diectory to install all dependencies from `package.json`   
 
-3. Run the command `npm run start` to start the program, if you wish to start it without building.    
+3. Run `pip install twelvedata` in the same directory to install the required package for the `StockAPI.py`(unimplemented)
 
-4. If you wish to build, run `npm run make` to build the project, it should create a folder called `out` that contains your executable. 
+4. Run the command `npm run start` to start the program, if you wish to start it without building.    
+
+5. If you wish to build, run `npm run make` to build the project, it should create a folder called `out` that contains your executable. 
