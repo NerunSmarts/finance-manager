@@ -57,6 +57,13 @@ img {
 
 }
 
+.addincome-pg button {
+  background-color: #04AA6D; /* Green */
+  border: none;
+  color: white;
+  padding: 5px 10px;
+}
+
 .nav-icon {
   width: 20px;
   height: 20px;
@@ -162,6 +169,7 @@ body {
 
 .addincome-pg .statistics canvas {
   border: 2px black solid;
+  border-radius: 8px;
   width: 512px;
   height: 300px;
 }
@@ -169,8 +177,8 @@ body {
 @media screen and (max-width: 1380px) {
   .addincome-pg .statistics {   /* do we need to fix this? It seems to make the chart overlap stuff */
       position: relative;
+      left: 10px;
   }
-
 
   .addincome-pg .statistics h1 {
      text-align: left !important;;
@@ -178,6 +186,28 @@ body {
 
 }
 
+@media (prefers-color-scheme: dark) {
+  .addincome-pg .statistics canvas {
+      border: 2px white solid;
+  }
+
+  body {
+      background-color: #1a1a18;
+  }
+
+  .addincome-pg .statistics h1 {
+      color: white;
+  }
+
+  .addincome-pg .statistics p {
+      color: white;
+  }
+  .addincome-pg p {
+      color: white;
+
+  }
+
+}
 
 /* Add Expenses page */
 
