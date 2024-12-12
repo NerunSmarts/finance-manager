@@ -12,6 +12,27 @@
   <body>
     <header></header>
     <main>
+      <div class="dashboard-pg" id = "dashboard-pg">
+        <img>
+        <p>Income:</p>
+        <p>Expenses:</p>
+        <p>Investments:</p>
+        <p>Left over balance:</p>
+        <p>Income per year:</p>
+        <p>Income per month:</p>
+        <p>Income per week:</p>
+        <p>Income per month:</p>
+        <p>Income per day:</p>
+        <p>Monthly expenses (recurring):</p>
+        <p>Yearly expenses (recurring):</p>
+        <p>Average expenses per month:</p>
+        <p>Average expenses per day:</p>
+        <p>Investment growth per year:</p>
+        <p>Investment growth per month:</p>
+        <p>Investment growth per week:</p>
+        <p>Investment growth per month:</p>
+        <p>Investment growth per day:</p>
+      </div>
       <div class="addincome-pg" id = "addincome-pg">
         <img>
         <p>Hourly salary (in $):</p>
@@ -87,15 +108,25 @@
         <center><p class="finalexpenses-p">Left over balance with income:</p></center>
 
       </div>
+      <div class="investments-pg" id = "investments-pg">
+        <img>
+        <h1>Investments</h1>
+        <p>There's gonna be something here before too long...</p>
+      </div>
+      <div class="settings-pg" id = "settings-pg">
+        <img>
+        <h1>Settings</h1>
+        <p>There's gonna be something here before too long...</p>
+      </div>
     <aside>
       <div class="nav-bar-container">
         <ul class="nav-bar">
           <img src="#">
-          <li id = "dashButton"><object class="nav-icon" id="dashIcon"></object><p>Dashboard</p></li>
+          <li id = "dashButton" onclick = "this.dashButtonF()"><object class="nav-icon" id="dashIcon"></object><p>Dashboard</p></li>
           <li id = "expButton" onclick = "this.expButtonF()"><object class="nav-icon" id="expenseIcon"></object><p>Expenses</p></li>
           <li id = "incomeButton" onclick = "this.incomeButtonF()"><object class="nav-icon" id="incomeIcon"></object><p>Income</p></li>
-          <li id = "invButton"><object class="nav-icon" id="investmentIcon"></object><p>Investments</p></li>
-          <li id = "settingsButton"><object class="nav-icon" id="settingsIcon"></object><p>Settings</p></li>
+          <li id = "invButton" onclick = "this.invButtonF()"><object class="nav-icon" id="investmentIcon"></object><p>Investments</p></li>
+          <li id = "settingsButton" onclick = "this.settingsButtonF()"><object class="nav-icon" id="settingsIcon"></object><p>Settings</p></li>
         </ul>
         </div>
       </aside>

@@ -37,7 +37,7 @@ import  Chart  from 'chart.js/auto';
 const { ipcRenderer } = require('electron')
 
 var currentPageIndex = 0;
-var pageList = ['addincome-pg', 'addexpenses-pg']; // final will be ['addincome-pg', 'addexpenses-pg', 'dashboard-pg', 'investments-pg', 'settings-pg']
+var pageList = ['dashboard-pg', 'addincome-pg', 'addexpenses-pg', "investments-pg", "settings-pg"]; // final will be ['addincome-pg', 'addexpenses-pg', 'dashboard-pg', 'investments-pg', 'settings-pg']
 
 // inter-process communication test, will fix when we need data from the database.
 ipcRenderer.on('init-sync', (event, args) => {
@@ -45,17 +45,17 @@ ipcRenderer.on('init-sync', (event, args) => {
 });
 
 // Set up the navigation bar
-document.getElementById('dashButton').innerHTML = `<object data="${dashIcon}" class="nav-icon" id = "dashIconO"></object><a>Dashboard</a>`;
-document.getElementById('incomeButton').innerHTML = `<object data="${incomeIcon}" class="nav-icon" id = "incomeIconO" onclick = "this.incomeIButtonF()"></object><a>Income</a>`;
-document.getElementById('invButton').innerHTML = `<object data="${investIcon}" class="nav-icon" id = "investIconO"></object><a>Investments</a>`;
-document.getElementById('expButton').innerHTML = `<object data="${expenseIcon}" class="nav-icon" id = "expenseIconO" onclick = "this.expIButtonF()"></object><a>Expenses</a>`;
-document.getElementById('settingsButton').innerHTML = `<object data="${settingsIcon}" class="nav-icon" id = "settingsIconO"></object><a>Settings</a>`;
+document.getElementById('dashButton').innerHTML = `<object data="${dashIcon}" class="nav-icon" id = "dashIconO" onclick = "this.dashButtonF()"></object><a>Dashboard</a>`;
+document.getElementById('incomeButton').innerHTML = `<object data="${incomeIcon}" class="nav-icon" id = "incomeIconO" onclick = "this.incomeButtonF()"></object><a>Income</a>`;
+document.getElementById('invButton').innerHTML = `<object data="${investIcon}" class="nav-icon" id = "investIconO" onclick = "this.invButtonF()"></object><a>Investments</a>`;
+document.getElementById('expButton').innerHTML = `<object data="${expenseIcon}" class="nav-icon" id = "expenseIconO" onclick = "this.expButtonF()"></object><a>Expenses</a>`;
+document.getElementById('settingsButton').innerHTML = `<object data="${settingsIcon}" class="nav-icon" id = "settingsIconO" onclick = "this.settingsButtonF()"></object><a>Settings</a>`;
 
 //initialize a page to display
 for (let i in pageList) {
     document.getElementById(pageList[i]).style.display = 'none';
 }
-document.getElementById('addincome-pg').style.display = 'block'; // default page for now
+document.getElementById('dashboard-pg').style.display = 'block';
 
 // Graphing code
 (async function() {
@@ -96,23 +96,46 @@ function switchOnClick() {
     }
     document.getElementById(pageList[currentPageIndex]).style.display = 'block';
 }
+
 document.getElementById('expButton').expButtonF = () => {
-    currentPageIndex = 1 - 1;  //temporarily set to 1-1 while waiting for pages
+    currentPageIndex = 2;  //temporarily set to 1-1 while waiting for pages
     switchOnClick();
 }
-document.getElementById('expenseIconO').expIButtonF = () => {
-    currentPageIndex = 1 - 1;
+document.getElementById('expenseIconO').expButtonF = () => {
+    currentPageIndex = 2;
     switchOnClick();
 }
 document.getElementById('incomeButton').incomeButtonF = () => {
-    currentPageIndex = 2 - 1;
+    currentPageIndex = 1;
     switchOnClick();
 }
-document.getElementById('incomeIconO').incomeIButtonF = () => {
-    currentPageIndex = 2 - 1;
+document.getElementById('incomeIconO').incomeButtonF = () => {
+    currentPageIndex = 1;
     switchOnClick();
 }
-document.getElementById('dashButton').addEventListener('click', () => {
-    console.log('dash clicked');
-});
+document.getElementById('dashButton').dashButtonF = () => {
+    currentPageIndex = 0;
+    switchOnClick();
+}
+document.getElementById('dashIconO').dashButtonF = () => {
+    currentPageIndex = 0;
+    switchOnClick();
+}
+document.getElementById('settingsButton').settingsButtonF = () => {
+    currentPageIndex = 4;
+    switchOnClick();
+}
+document.getElementById('settingsIconO').settingsButtonF = () => {
+    currentPageIndex = 4;
+    switchOnClick();
+}
+document.getElementById('invButton').invButtonF = () => {
+    currentPageIndex = 3;
+    switchOnClick();
+}
+document.getElementById('investIconO').invButtonF = () => {
+    currentPageIndex = 3;
+    switchOnClick();
+}
+
 

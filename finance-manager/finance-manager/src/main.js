@@ -42,6 +42,7 @@ app.whenReady().then(() => {
   console.log("Database handler started");
   
   databaseHandler.on('spawn', () => {
+    console.log("Database handler spawned");
     databaseHandler.postMessage({ message: 'init' }, [port2]);
     port1.on('connect', (message) => {
       console.log("talking to database handler!")

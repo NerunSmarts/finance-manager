@@ -1,13 +1,15 @@
-const { app } = require('electron');
+const { MessagePortMain } = require('electron');
 const path = require('node:path');
 const fs = require('fs');
 const SQLjs = require('sql.js');
 
-var dbPath = app.getPath('userData');
+const port = new MessagePortMain();
+
 var dbExists = false;
 
+
 process.parentPort.on('message', (e) => {
-    const [port] = e.ports;
+    port = e.ports;
     console.log("got a port!");
     port.postMessage({ message: 'connect' });
     port.start();
