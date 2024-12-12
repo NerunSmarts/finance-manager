@@ -1,8 +1,8 @@
-const { app, BrowserWindow, ipcMain, utilityProcess, MessageChannelMain } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
 const fs = require('fs');
+const { SQLjs } = require('sql.js');
 const dbPath = app.getPath('userData')
-const { port1, port2 } = new MessageChannelMain();
 var args = [""];
 var databaseHandler;
 
@@ -16,6 +16,8 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    minWidth: 800,
+    minHeight: 600,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: true,
@@ -36,20 +38,13 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  let window = createWindow(); 
-
-  databaseHandler = utilityProcess.fork(path.join(__dirname, 'databaseHandler.js'), args, {stdio: 'pipe', cwd: dbPath});
-  console.log("Database handler started");
+  let window = createWindow();
   
-  databaseHandler.on('spawn', () => {
-    console.log("Database handler spawned");
-    databaseHandler.postMessage({ message: 'init' }, [port2]);
-    port1.on('connect', (message) => {
-      console.log("talking to database handler!")
-    });
-  });
-  window.webContents.send('init-sync', 'connected to main!');
   console.log("sending init-sync message") // DO NOT FUCKING REMOVE THIS LINE IT BREAKS SENDING FOR SOME FUCKING REASON
+  ipcMain.on('init-sync', (event, args) => {
+    console.log(args)
+    window.webContents.send('init-sync', 'connected to main!');
+  });
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -65,8 +60,7 @@ app.whenReady().then(() => {
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin' | true) {
-    console.log("app is closing")
-    databaseHandler.kill()
+    console.log("app is closing");
     app.quit();
   }
 });

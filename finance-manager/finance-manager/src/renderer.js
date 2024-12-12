@@ -44,6 +44,7 @@ var pageList = ['dashboard-pg', 'addincome-pg', 'addexpenses-pg', "investments-p
 ipcRenderer.on('init-sync', (event, args) => {
   console.log(args)
 });
+  ipcRenderer.send('init-sync', 'connected to renderer!');
 
 // Set up the navigation bar
 document.getElementById('dashButton').innerHTML = `<img src="${dashIcon}" class="nav-icon" id = "dashIconO" onclick = "this.dashButtonF()"></img><a>Dashboard</a>`;
