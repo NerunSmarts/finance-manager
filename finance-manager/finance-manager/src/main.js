@@ -3,8 +3,7 @@ const path = require('node:path');
 const fs = require('fs');
 const { SQLjs } = require('sql.js');
 const dbPath = app.getPath('userData')
-var args = [""];
-var databaseHandler;
+import DBHandler from './databaseHandler.js';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -41,10 +40,7 @@ app.whenReady().then(() => {
   let window = createWindow();
   
   console.log("sending init-sync message") // DO NOT FUCKING REMOVE THIS LINE IT BREAKS SENDING FOR SOME FUCKING REASON
-  ipcMain.on('init-sync', (event, args) => {
-    console.log(args)
-    window.webContents.send('init-sync', 'connected to main!');
-  });
+
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -52,6 +48,15 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
     }
+  });
+
+  ipcMain.on('init-sync', (event, args) => {
+    console.log(args)
+    window.webContents.send('init-sync', 'connected to main!');
+
+      //Database handler code:
+      //DBHandler.createDB(); or something
+
   });
 });
 
@@ -69,5 +74,4 @@ app.on('window-all-closed', () => {
 // code. You can also put them in separate files and import them here.
 
  // Start the database handler and set it up to handle requests
- 
  
