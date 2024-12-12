@@ -32,6 +32,7 @@ import incomeIcon from './icons/cash-sharp.svg';
 import investIcon from './icons/stats-chart-sharp.svg';
 import expenseIcon from './icons/trending-down-sharp.svg';
 import settingsIcon from './icons/settings-sharp.svg';
+import fmlogo from './icons/fmlogo.svg';
 
 import  Chart  from 'chart.js/auto';
 const { ipcRenderer } = require('electron')
@@ -45,11 +46,12 @@ ipcRenderer.on('init-sync', (event, args) => {
 });
 
 // Set up the navigation bar
-document.getElementById('dashButton').innerHTML = `<object data="${dashIcon}" class="nav-icon" id = "dashIconO" onclick = "this.dashButtonF()"></object><a>Dashboard</a>`;
-document.getElementById('incomeButton').innerHTML = `<object data="${incomeIcon}" class="nav-icon" id = "incomeIconO" onclick = "this.incomeButtonF()"></object><a>Income</a>`;
-document.getElementById('invButton').innerHTML = `<object data="${investIcon}" class="nav-icon" id = "investIconO" onclick = "this.invButtonF()"></object><a>Investments</a>`;
-document.getElementById('expButton').innerHTML = `<object data="${expenseIcon}" class="nav-icon" id = "expenseIconO" onclick = "this.expButtonF()"></object><a>Expenses</a>`;
-document.getElementById('settingsButton').innerHTML = `<object data="${settingsIcon}" class="nav-icon" id = "settingsIconO" onclick = "this.settingsButtonF()"></object><a>Settings</a>`;
+document.getElementById('dashButton').innerHTML = `<img src="${dashIcon}" class="nav-icon" id = "dashIconO" onclick = "this.dashButtonF()"></img><a>Dashboard</a>`;
+document.getElementById('incomeButton').innerHTML = `<img src="${incomeIcon}" class="nav-icon" id = "incomeIconO" onclick = "this.incomeButtonF()"></img><a>Income</a>`;
+document.getElementById('invButton').innerHTML = `<img src="${investIcon}" class="nav-icon" id = "investIconO" onclick = "this.invButtonF()"></img><a>Investments</a>`;
+document.getElementById('expButton').innerHTML = `<img src="${expenseIcon}" class="nav-icon" id = "expenseIconO" onclick = "this.expButtonF()"></img><a>Expenses</a>`;
+document.getElementById('settingsButton').innerHTML = `<img src="${settingsIcon}" class="nav-icon" id = "settingsIconO" onclick = "this.settingsButtonF()"></img><a>Settings</a>`;
+document.getElementById('fmlogodisplay').innerHTML = `<img src="${fmlogo}" class="fm-logo" id = "fmlogoimg"></src>`;
 
 //initialize a page to display
 for (let i in pageList) {

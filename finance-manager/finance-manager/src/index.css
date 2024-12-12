@@ -47,14 +47,14 @@ body {
 
 }
 
-img {
-  width: 10vw;
-  height: 130px;
-  margin-top: 50px;
+.fmlogodisplay img {
+  width: 65px;
+  height: 65px;
+  margin-top:15px;
+  margin-bottom: 0px;
   display: inline;
-  position: relative;
-  right: 5px;
-
+  right: 0px;
+  filter: brightness(0) invert(1);
 }
 
 .addincome-pg button {
@@ -84,7 +84,7 @@ img {
 }
 
 @media screen and (max-width: 1080px) {
-  img {
+  .fmlogodisplay img {
       position: relative;
       right: 18px;
   }
@@ -92,14 +92,14 @@ img {
 
 
 @media screen and (max-width: 980px) {
-  img {
+  .fmlogodisplay img {
       position: relative;
       right: 20px;
   }
 }
 
 @media screen and (max-width: 780px) {
-  img {
+  .fmlogodisplay img {
       position: relative;
       right: 25px;
   }
@@ -110,11 +110,16 @@ img {
       display: none;
   }
 
-  .nav-bar object {
+  .nav-bar img {
       position: relative;
       left: 50%;
       transform: translate(-50%, 0%);
 
+  }
+  .fmlogodisplay img {
+      position: relative;
+      left: 0px;
+      right: 0px;
   }
 }
 
