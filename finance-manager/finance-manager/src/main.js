@@ -3,9 +3,10 @@ const path = require('node:path');
 const fs = require('fs');
 const { open } = require('sqlite')
 const dbPath = app.getPath('userData')
+import icon from './icons/fmlogo.svg';
 //const pythonShell = require('python-shell');
 
-import DBHandler, { initSql } from './databaseHandler.js';
+import DBHandler, { createTables, getIncome, initSql } from './databaseHandler.js';
 //import pyScript from './StockAPI.py';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -20,6 +21,7 @@ const createWindow = () => {
     height: 600,
     minWidth: 800,
     minHeight: 600,
+    icon: icon,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: true,
@@ -56,24 +58,36 @@ app.whenReady().then(() => {
   ipcMain.on('init-sync', (event, args) => {
     console.log(args)
     window.webContents.send('init-sync', 'connected to main!');
-
-    let db = initSql(dbPath);
-    console.log(db);
-/*
-    pythonShell.PythonShell.run(pyScript, null, function (err, results) {
-      if (err) throw err;
-      console.log(results);
-      console.log('finished');
-    });
-*/
-    
-/*
-    if (!DBHandler.dbExists(dbPath)) {
-      DBHandler.createDatabase(dbPath);
-    } else {
-      DBHandler.loadDatabase(dbPath);
-    }
-*/
+    let db = initSql(dbPath).then((db) => {
+      console.log("database initialized, creating tables if they don't exist");
+      createTables(db).then(() => {
+        console.log("tables created");
+      });
+      ipcMain.on('db-income-request', (event, args) => {
+          getIncome(db, args).then((data) => {
+              console.log(data);
+              window.webContents.send('db-income-reply', data);
+          });
+      })
+      ipcMain.on('db-expense-request', (event, args) => {
+          getExpense(db, args).then((data) => {
+              console.log(data);
+              window.webContents.send('db-expense-reply', data);
+          });
+      })
+      ipcMain.on('db-investment-request', (event, args) => {
+          getInvestment(db, args).then((data) => {
+              console.log(data);
+              window.webContents.send('db-investment-reply', data);
+          });
+      })
+      ipcMain.on('db-setting-request', (event, args) => {
+          getSetting(db, args).then((data) => {
+              console.log(data);
+              window.webContents.send('db-setting-reply', data);
+          });
+      });
+    })
   });
 });
 
