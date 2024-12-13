@@ -3,6 +3,29 @@
   src: url(./fonts/LTSuperior-Regular.otf);
 }
 
+@font-face {
+  font-family: roboto;
+  src: url(./fonts/Roboto-Regular.ttf);
+}
+
+@font-face {
+  font-family: inter;
+  src: url(./fonts/Inter-Medium.ttf);
+}
+
+.heading {
+  font-family: inter;
+  font-weight: bold;
+}
+
+.paragraph {
+  font-family: roboto;
+}
+
+.uicontrols {
+  font-family: ltsr;
+}
+
 body {
   margin: 0;
 }
@@ -33,6 +56,7 @@ body {
   color: #c5c5c5;
   font-size: 18px;
   width: 15%;
+  margin-left: 8px;
 }
 
 .nav-bar li {
@@ -182,12 +206,18 @@ body {
 .finalincome-p {
   position: relative;
   top: 200px;
+  margin-bottom: 40px;
   font-size: 28px;
+}
+
+.addincome-pg input {
+  border: none;
+  padding: 6px;
 }
 
 
 .addincome-pg .statistics canvas {
-  border: 2px black solid;
+  border: none;
   border-radius: 8px;
   width: 512px;
   height: 300px;
@@ -205,12 +235,16 @@ body {
      text-align: left !important;;
   }
 
+  .finalincome-p {
+    position: relative;
+    top: 400px;
+    height: 100px;
+  }
+
 }
 
 @media (prefers-color-scheme: dark) {
-  .addincome-pg .statistics canvas {
-      border: 2px white solid;
-  }
+
 
   body {
       background-color: #1a1a18;
@@ -226,6 +260,11 @@ body {
   .addincome-pg p {
       color: white;
 
+  }
+
+  .addincome-pg input {
+    background-color: #3b3b3b;
+    color: white;
   }
 
 }
@@ -263,11 +302,24 @@ body {
   font-size: 28px;
 }
 
+.addexpenses-pg button {
+  background-color: #04AA6D; /* Green */
+  border: none;
+  color: white;
+  padding: 5px 10px;
+}
+
 
 .addexpenses-pg .statistics canvas {
-  border: 2px black solid;
+  border: none;
   width: 512px;
   height: 300px;
+}
+
+.addexpenses-pg input {
+  border: none;
+  padding: 6px;
+
 }
 
 @media screen and (max-width: 1380px) {
@@ -282,7 +334,41 @@ body {
       text-align: left !important;;
   }
 
-}
+  
+
+  }
+
+  @media (prefers-color-scheme: dark) {
+
+  
+    body {
+        background-color: #1a1a18;
+    }
+  
+    .addexpenses-pg .statistics h1 {
+        color: white;
+    }
+  
+    .addexpenses-pg .statistics p {
+        color: white;
+    }
+    .addexpenses-pg p {
+        color: white;
+  
+    }
+
+    .addexpenses-pg input {
+      background-color: #3b3b3b;
+      color: white;
+    }
+
+    .addexpenses-pg select {
+      background-color: #3b3b3b;
+      color: white;
+      border: none;
+    }
+  }
+
 
 /* Dashboard page */
 
@@ -320,4 +406,149 @@ body {
   height: 150px !important;
 }
 
+@media (prefers-color-scheme: dark) {
+  
+  .dashboard-pg .blocks-container .income-block {
+    background-color: rgb(0, 110, 62);
+  }
+  
+  .dashboard-pg .blocks-container .expenses-block {
+    background-color: rgb(160, 80, 0);
+    padding-bottom: 55px;
+  }
+  
+  .dashboard-pg .blocks-container .investment-block {
+    background-color: rgb(100, 1, 124);
+  }
+
+  .dashboard-pg p {
+    color: white;
+  }
+
+}
+
 /* Investments page */
+
+.investments-pg {
+  position: relative;
+  margin-left: 15%;
+  left: 35px;
+  top: 40px;
+}
+
+.investments-pg img {
+  width: 500px;
+  height: 150px;
+}
+
+.investments-pg .statistics {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  margin-right: 100px;
+}
+
+.investments-pg .statistics p {
+  position: relative;
+  left: 70px;
+}
+
+.investments-pg .statistics canvas {
+  border: none;
+  border-radius: 8px;
+  width: 512px;
+  height: 300px;
+}
+
+.investments-pg button {
+  background-color: #04AA6D; /* Green */
+  border: none;
+  color: white;
+  padding: 5px 10px;
+}
+
+.investments-pg input {
+  border: none;
+  padding: 6px;
+}
+
+@media screen and (max-width: 1380px) {
+  .investments-pg .statistics {   /* do we need to fix this? It seems to make the chart overlap stuff */
+      position: relative;
+      left: 10px;
+      width: 512px;
+      height: 300px;
+  }
+
+  .investments-pg .statistics h1 {
+     text-align: left !important;;
+  }
+
+}
+
+@media (prefers-color-scheme: dark) {
+
+
+  body {
+      background-color: #1a1a18;
+  }
+
+  .investments-pg .statistics h1 {
+      color: white;
+  }
+
+  .investments-pg .statistics p {
+      color: white;
+  }
+  .investments-pg p {
+      color: white;
+
+  }
+
+  .investments-pg input {
+    background-color: #3b3b3b;
+    color: white;
+  }
+}
+
+  /* Settings page */
+
+  .settings-pg {
+    position: relative;
+    margin-left: 15%;
+    left: 35px;
+    top: 40px;
+  }
+
+  .settings-pg input {
+    border: none;
+    padding: 8px;
+  }
+
+  .settings-pg button {
+    background-color: #04AA6D; /* Green */
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    padding: 8px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+
+
+    body {
+        background-color: #1a1a18;
+    }
+  
+    .settings-pg p {
+        color: white;
+  
+    }
+  
+    .settings-pg input {
+      background-color: #3b3b3b;
+      color: white;
+    }
+  }
+
+

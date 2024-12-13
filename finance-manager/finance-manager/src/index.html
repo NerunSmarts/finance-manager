@@ -17,33 +17,33 @@
         <div class="blocks-container">
           <center>
           <div class="income-block">
-            <center><p>Total Income:</p></center>
+            <center><p class="heading">Total Income:</p></center>
             <canvas id = "incomeChart"></canvas>
-            <p>Income per year:</p>
-            <p>Income per month:</p>
-            <p>Income per week:</p>
-            <p>Income per month:</p>
-            <p>Income per day:</p>
+            <p class="paragraph">Income per year:</p>
+            <p class="paragraph">Income per month:</p>
+            <p class="paragraph">Income per week:</p>
+            <p class="paragraph">Income per month:</p>
+            <p class="paragraph">Income per day:</p>
           </div>
 
           <div class = "expenses-block">
-            <center><p>Total Expenses:</p></center>
+            <center><p class="heading">Total Expenses:</p></center>
             <canvas id ="incomeChart"></canvas>
-            <p>Monthly expenses (recurring):</p>
-            <p>Yearly expenses (recurring):</p>
-            <p>Average expenses per month:</p>
-            <p>Average expenses per day:</p>
+            <p class="paragraph">Monthly expenses (recurring):</p>
+            <p class="paragraph">Yearly expenses (recurring):</p>
+            <p class="paragraph">Average expenses per month:</p>
+            <p class="paragraph">Average expenses per day:</p>
           </div>
 
           <div class="investment-block" style="margin-bottom: 100px;">
-            <center><p>Total Investments:</p></center>
+            <center><p class="heading">Total Investments:</p></center>
             <canvas id="incomeChart"></canvas>
-            <p>Left over balance:</p>
-            <p>Investment growth per year:</p>
-            <p>Investment growth per month:</p>
-            <p>Investment growth per week:</p>
-            <p>Investment growth per month:</p>
-            <p>Investment growth per day:</p>
+            <p class="paragraph">Left over balance:</p>
+            <p class="paragraph">Investment growth per year:</p>
+            <p class="paragraph">Investment growth per month:</p>
+            <p class="paragraph">Investment growth per week:</p>
+            <p class="paragraph">Investment growth per month:</p>
+            <p class="paragraph">Investment growth per day:</p>
           </div>
         </center>
       </div>
@@ -51,81 +51,96 @@
       </div>
       <div class="addincome-pg" id = "addincome-pg">
         <img>
-        <p>Hourly salary (in $):</p>
-        <input></input><button>Update</button>
-        <p>Hours per day (approx):</p>
-        <input></input><button>Update</button>
-        <p>Days working per week (approx):</p>
-        <input></input><button>Update</button>
-        <p>Additional income this year (in $):</p>
-        <input></input><button>Update</button>
+        <p class="paragraph">Hourly salary (in $):</p>
+        <input class="uicontrols"></input><button class="uicontrols">Update</button>
+        <p class="paragraph">Hours per day (approx):</p>
+        <input class="uicontrols"></input><button class="uicontrols">Update</button>
+        <p class="paragraph">Days working per week (approx):</p>
+        <input class="uicontrols"></input><button class="uicontrols">Update</button>
+        <p class="paragraph">Additional income this year (in $):</p>
+        <input class="uicontrols"></input><button class="uicontrols">Update</button>
 
 
         <div class="statistics" id = "statistics">
           <canvas id = "incomeChart"></canvas>
-          <center><h1>Total income:</h1></center>
-          <p>Income per year:</p>
-          <p>Income per month:</p>
-          <p>Income per week:</p>
-          <p>Income per month:</p>
-          <p>Income per day:</p>
+          <center><h1 class="heading">Total income:</h1></center>
+          <p class="paragraph">Income per year:</p>
+          <p class="paragraph">Income per month:</p>
+          <p class="paragraph">Income per week:</p>
+          <p class="paragraph">Income per month:</p>
+          <p class="paragraph">Income per day:</p>
         </div>
+        <center><p class="finalincome-p heading">Final income with expenses:</p></center>
 
-        <center><p class="finalincome-p">Final income with expenses:</p></center>
+
 
       </div>
       <div class="addexpenses-pg" id = "addexpenses-pg">
         <img>
-        <p>Expenses List</p>
-     <select name="sometext" size="5" style="width: 40%;">
+        <p class="heading">Expenses List</p>
+     <select class="uicontrols" name="sometext" size="5" style="width: 40%;">
           <option>Test</option>
         </select>
         <br>
         <br>
 
-        <button onclick="document.getElementById('expdialog').style.display = 'block';">Add expense</button>
-        <button>Delete expense</button>
+        <button class="uicontrols" onclick="document.getElementById('expdialog').style.display = 'block';">Add expense</button>
+        <button class="uicontrols">Delete expense</button>
         <div class="expense-dialog" id="expdialog">
-          <p>Expense name:</p>
+          <p class="paragraph">Expense name:</p>
           <input></input>
-          <p>Expense memo:</p>
+          <p class="paragraph">Expense memo:</p>
           <input></input>
-          <p>Expense amount:</p>
+          <p class="paragraph">Expense amount:</p>
           <input></input>
-          <p>Expense type:</p>
-          <select>
+          <p class="paragraph">Expense type:</p>
+          <select class="uicontrols">
             <option>One time expense</option>
             <option>Monthly recurring expense (starting today)</option>
             <option>Yearly recurring expense (starting today)</option>
           </select>
           <br>
           <br>
-          <button>Submit</button>
-          <button onclick="document.getElementById('expdialog').style.display = 'none';">Cancel</button>
+          <button class="uicontrols">Submit</button>
+          <button onclick="document.getElementById('expdialog').style.display = 'none';" class="uicontrols">Cancel</button>
         </div>
 
 
         <div class="statistics">
           <canvas id="expenseschart"></canvas>
-          <center><h1>Total expenses:</h1></center>
-          <p>Monthly expenses (recurring):</p>
-          <p>Yearly expenses (recurring):</p>
-          <p>Average expenses per month:</p>
-          <p>Average expenses per day:</p>
+          <center><h1 class="heading">Total expenses:</h1></center>
+          <p class="paragraph">Monthly expenses (recurring):</p>
+          <p class="paragraph">Yearly expenses (recurring):</p>
+          <p class="paragraph">Average expenses per month:</p>
+          <p class="paragraph">Average expenses per day:</p>
         </div>
 
-        <center><p class="finalexpenses-p">Left over balance with income:</p></center>
 
       </div>
       <div class="investments-pg" id = "investments-pg">
         <img>
-        <h1>Investments</h1>
-        <p>There's gonna be something here before too long...</p>
+        <p class="paragraph">Ticker:</p>
+        <input class="uicontrols"></input><button class="uicontrols">Update</button>
+        <p class="paragraph">Amount:</p>
+        <input class="uicontrols"></input><button class="uicontrols">Update</button>
+        <p class="paragraph">Date (MM-DD-YYYY):</p>
+        <input class="uicontrols"></input><button class="uicontrols">Update</button>
+
+        <div class="statistics" id = "statistics">
+          <canvas id = "incomeChart"></canvas>
+          <center><h1 class="heading">Current Stock Price:</h1></center>
+          <p class="paragraph">Average return per year:</p>
+          <p class="paragraph">Average return per month:</p>
+          <p class="paragraph">Average return per week:</p>
+          <p class="paragraph">Average return per month:</p>
+          <p class="paragraph">Average returnper day:</p>
+        </div>
+
       </div>
       <div class="settings-pg" id = "settings-pg">
-        <img>
-        <h1>Settings</h1>
-        <p>There's gonna be something here before too long...</p>
+          <p class="heading">Settings</p>
+          <p class="paragraph">Twelvedata API key (demo key:  a17e94cd212b48f5a888d6ced4b63844):</p><input></input>
+          <button class="uicontrols">Apply</button>
       </div>
     <aside>
       <div class="nav-bar-container">
