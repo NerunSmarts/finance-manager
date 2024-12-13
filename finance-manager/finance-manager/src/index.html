@@ -14,24 +14,40 @@
     <main>
       <div class="dashboard-pg" id = "dashboard-pg">
         <img>
-        <p>Income:</p>
-        <p>Expenses:</p>
-        <p>Investments:</p>
-        <p>Left over balance:</p>
-        <p>Income per year:</p>
-        <p>Income per month:</p>
-        <p>Income per week:</p>
-        <p>Income per month:</p>
-        <p>Income per day:</p>
-        <p>Monthly expenses (recurring):</p>
-        <p>Yearly expenses (recurring):</p>
-        <p>Average expenses per month:</p>
-        <p>Average expenses per day:</p>
-        <p>Investment growth per year:</p>
-        <p>Investment growth per month:</p>
-        <p>Investment growth per week:</p>
-        <p>Investment growth per month:</p>
-        <p>Investment growth per day:</p>
+        <div class="blocks-container">
+          <center>
+          <div class="income-block">
+            <center><p>Total Income:</p></center>
+            <canvas id = "incomeChart"></canvas>
+            <p>Income per year:</p>
+            <p>Income per month:</p>
+            <p>Income per week:</p>
+            <p>Income per month:</p>
+            <p>Income per day:</p>
+          </div>
+
+          <div class = "expenses-block">
+            <center><p>Total Expenses:</p></center>
+            <canvas id ="incomeChart"></canvas>
+            <p>Monthly expenses (recurring):</p>
+            <p>Yearly expenses (recurring):</p>
+            <p>Average expenses per month:</p>
+            <p>Average expenses per day:</p>
+          </div>
+
+          <div class="investment-block" style="margin-bottom: 100px;">
+            <center><p>Total Investments:</p></center>
+            <canvas id="incomeChart"></canvas>
+            <p>Left over balance:</p>
+            <p>Investment growth per year:</p>
+            <p>Investment growth per month:</p>
+            <p>Investment growth per week:</p>
+            <p>Investment growth per month:</p>
+            <p>Investment growth per day:</p>
+          </div>
+        </center>
+      </div>
+
       </div>
       <div class="addincome-pg" id = "addincome-pg">
         <img>
@@ -62,14 +78,7 @@
         <img>
         <p>Expenses List</p>
      <select name="sometext" size="5" style="width: 40%;">
-          <option>
-            <ul>
-              <li class="">test</li>
-              <li class="">test2</li>
-              <li class="">test3</li>
-              <!-- Apparently this is deprecated and not an intended behavior, we should look into something else. -->
-            <ul>
-          </option>
+          <option>Test</option>
         </select>
         <br>
         <br>

@@ -284,3 +284,40 @@ body {
 
 }
 
+/* Dashboard page */
+
+.dashboard-pg {
+  position: relative;
+  margin-left: 15%;
+  left: 35px;
+  top: 40px;
+}
+
+.dashboard-pg .blocks-container div {
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 15px;
+  width: 600px;
+  text-align: left;
+}
+
+.dashboard-pg .blocks-container .income-block {
+  background-color: rgb(0, 255, 140);
+}
+
+.dashboard-pg .blocks-container .expenses-block {
+  background-color: rgb(255, 128, 0);
+  padding-bottom: 55px;
+}
+
+.dashboard-pg .blocks-container .investment-block {
+  background-color: rgb(204, 0, 255);
+}
+
+.dashboard-pg .blocks-container canvas {
+  float: right;
+  width: 300px !important;
+  height: 150px !important;
+}
+
+/* Investments page */
