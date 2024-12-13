@@ -51,24 +51,39 @@
       </div>
       <div class="addincome-pg" id = "addincome-pg">
         <img>
-        <p class="paragraph">Hourly salary (in $):</p>
-        <input class="uicontrols"></input><button class="uicontrols">Update</button>
-        <p class="paragraph">Hours per day (approx):</p>
-        <input class="uicontrols"></input><button class="uicontrols">Update</button>
-        <p class="paragraph">Days working per week (approx):</p>
-        <input class="uicontrols"></input><button class="uicontrols">Update</button>
-        <p class="paragraph">Additional income this year (in $):</p>
-        <input class="uicontrols"></input><button class="uicontrols">Update</button>
+        <p class="heading">Income List</p>
+        <select class="uicontrols" name="sometext" size="5" style="width: 40%;">
+          <option>Test</option>
+        </select>
+        <br>
+        <br>
+
+        <button class="uicontrols" onclick="document.getElementById('incdialog').style.display = 'block';">Add income</button>
+        <button class="uicontrols">Delete income</button>
+        <div class="income-dialog" id="incdialog">
+          <p class="paragraph">Income name:</p>
+          <input></input>
+          <p class="paragraph">Income amount:</p>
+          <input></input>
+          <p class="paragraph">Income type:</p>
+          <select class="uicontrols">
+            <option>One time income</option>
+            <option>Monthly recurring income (starting today)</option>
+          </select>
+          <br>
+          <br>
+          <button class="uicontrols">Submit</button>
+          <button onclick="document.getElementById('incdialog').style.display = 'none';" class="uicontrols">Cancel</button>
+        </div>
 
 
-        <div class="statistics" id = "statistics">
-          <canvas id = "incomeChart"></canvas>
+        <div class="statistics">
+          <canvas id="expenseschart"></canvas>
           <center><h1 class="heading">Total income:</h1></center>
-          <p class="paragraph">Income per year:</p>
-          <p class="paragraph">Income per month:</p>
-          <p class="paragraph">Income per week:</p>
-          <p class="paragraph">Income per month:</p>
-          <p class="paragraph">Income per day:</p>
+          <p class="paragraph">Monthly income (recurring):</p>
+          <p class="paragraph">Yearly income (recurring):</p>
+          <p class="paragraph">Average income per month:</p>
+          <p class="paragraph">Average income per day:</p>
         </div>
         <center><p class="finalincome-p heading">Final income with expenses:</p></center>
 
@@ -88,8 +103,6 @@
         <button class="uicontrols">Delete expense</button>
         <div class="expense-dialog" id="expdialog">
           <p class="paragraph">Expense name:</p>
-          <input></input>
-          <p class="paragraph">Expense memo:</p>
           <input></input>
           <p class="paragraph">Expense amount:</p>
           <input></input>
@@ -120,11 +133,14 @@
       <div class="investments-pg" id = "investments-pg">
         <img>
         <p class="paragraph">Ticker:</p>
-        <input class="uicontrols"></input><button class="uicontrols">Update</button>
+        <input class="uicontrols"></input>
         <p class="paragraph">Amount:</p>
-        <input class="uicontrols"></input><button class="uicontrols">Update</button>
+        <input class="uicontrols"></input>
         <p class="paragraph">Date (MM-DD-YYYY):</p>
-        <input class="uicontrols"></input><button class="uicontrols">Update</button>
+        <input class="uicontrols"></input>
+        <br>
+        <br>
+        <button class="uicontrols">Update</button>
 
         <div class="statistics" id = "statistics">
           <canvas id = "incomeChart"></canvas>
@@ -133,7 +149,7 @@
           <p class="paragraph">Average return per month:</p>
           <p class="paragraph">Average return per week:</p>
           <p class="paragraph">Average return per month:</p>
-          <p class="paragraph">Average returnper day:</p>
+          <p class="paragraph">Average return per day:</p>
         </div>
 
       </div>

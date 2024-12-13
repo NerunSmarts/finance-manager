@@ -112,6 +112,10 @@ body {
   display: none;
 }
 
+.income-dialog {
+  display: none;
+}
+
 @media screen and (max-width: 1080px) {
   .fmlogodisplay img {
       position: relative;
@@ -205,34 +209,42 @@ body {
 
 .finalincome-p {
   position: relative;
-  top: 200px;
-  margin-bottom: 40px;
+  top: 300px;
   font-size: 28px;
 }
 
-.addincome-pg input {
+.addincome-pg button {
+  background-color: #04AA6D; /* Green */
   border: none;
-  padding: 6px;
+  color: white;
+  padding: 5px 10px;
 }
 
 
 .addincome-pg .statistics canvas {
   border: none;
-  border-radius: 8px;
   width: 512px;
   height: 300px;
 }
 
+.addincome-pg input {
+  border: none;
+  padding: 6px;
+
+}
+
+
+
 @media screen and (max-width: 1380px) {
-  .addincome-pg .statistics {   /* do we need to fix this? It seems to make the chart overlap stuff */
+  .addincome-pg .statistics {
       position: relative;
-      left: 10px;
       width: 512px;
       height: 300px;
   }
 
+
   .addincome-pg .statistics h1 {
-     text-align: left !important;;
+      text-align: left !important;;
   }
 
   .finalincome-p {
@@ -241,33 +253,40 @@ body {
     height: 100px;
   }
 
-}
+  
 
-@media (prefers-color-scheme: dark) {
-
-
-  body {
-      background-color: #1a1a18;
   }
 
-  .addincome-pg .statistics h1 {
+  @media (prefers-color-scheme: dark) {
+
+  
+    body {
+        background-color: #1a1a18;
+    }
+  
+    .addincome-pg .statistics h1 {
+        color: white;
+    }
+  
+    .addincome-pg .statistics p {
+        color: white;
+    }
+    .addincome-pg p {
+        color: white;
+  
+    }
+
+    .addincome-pg input {
+      background-color: #3b3b3b;
       color: white;
-  }
+    }
 
-  .addincome-pg .statistics p {
+    .addincome-pg select {
+      background-color: #3b3b3b;
       color: white;
+      border: none;
+    }
   }
-  .addincome-pg p {
-      color: white;
-
-  }
-
-  .addincome-pg input {
-    background-color: #3b3b3b;
-    color: white;
-  }
-
-}
 
 /* Add Expenses page */
 
