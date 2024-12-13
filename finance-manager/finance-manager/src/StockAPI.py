@@ -15,6 +15,7 @@ quotes = td.quote(symbol=",".join(symbols)).as_json()
 # Once the database is implemented, this script will write the latest prices to the database.
 
 # Open a file in write mode
+
 with open('latest_prices.csv', mode='w', newline='') as file:
     writer = csv.writer(file)
     
@@ -28,3 +29,4 @@ with open('latest_prices.csv', mode='w', newline='') as file:
             writer.writerow([symbol, latest_price])
         except KeyError:
             print(f"Error: Could not find the latest price for {symbol}")
+print ("Python script ran!")

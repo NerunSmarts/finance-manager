@@ -1,9 +1,12 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
 const fs = require('fs');
-const { SQLjs } = require('sql.js');
+const { open } = require('sqlite')
 const dbPath = app.getPath('userData')
-import DBHandler from './databaseHandler.js';
+//const pythonShell = require('python-shell');
+
+import DBHandler, { initSql } from './databaseHandler.js';
+//import pyScript from './StockAPI.py';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -39,7 +42,7 @@ const createWindow = () => {
 app.whenReady().then(() => {
   let window = createWindow();
   
-  console.log("sending init-sync message") // DO NOT FUCKING REMOVE THIS LINE IT BREAKS SENDING FOR SOME FUCKING REASON
+  console.log("sending init-sync message")
 
 
   // On OS X it's common to re-create a window in the app when the
@@ -54,9 +57,23 @@ app.whenReady().then(() => {
     console.log(args)
     window.webContents.send('init-sync', 'connected to main!');
 
-      //Database handler code:
-      //DBHandler.createDB(); or something
-
+    let db = initSql(dbPath);
+    console.log(db);
+/*
+    pythonShell.PythonShell.run(pyScript, null, function (err, results) {
+      if (err) throw err;
+      console.log(results);
+      console.log('finished');
+    });
+*/
+    
+/*
+    if (!DBHandler.dbExists(dbPath)) {
+      DBHandler.createDatabase(dbPath);
+    } else {
+      DBHandler.loadDatabase(dbPath);
+    }
+*/
   });
 });
 
@@ -74,4 +91,3 @@ app.on('window-all-closed', () => {
 // code. You can also put them in separate files and import them here.
 
  // Start the database handler and set it up to handle requests
- 
