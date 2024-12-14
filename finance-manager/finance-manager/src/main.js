@@ -6,7 +6,7 @@ const dbPath = app.getPath('userData')
 import icon from './icons/fmlogo.svg';
 //const pythonShell = require('python-shell');
 
-import DBHandler, { createTables, getIncome, initSql } from './databaseHandler.js';
+import DBHandler, { createTables, getIncome, getMostRecentIncome, initSql } from './databaseHandler.js';
 //import pyScript from './StockAPI.py';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -63,10 +63,10 @@ app.whenReady().then(() => {
       createTables(db).then(() => {
         console.log("tables created");
       });
-      ipcMain.on('db-income-request', (event, args) => {
-          getIncome(db, args).then((data) => {
+      ipcMain.on('db-incomerecent-request', (event, args) => {
+          getMostRecentIncome(db, args).then((data) => {
               console.log(data);
-              window.webContents.send('db-income-reply', data);
+              window.webContents.send('db-incomerecent-reply', data);
           });
       })
       ipcMain.on('db-expense-request', (event, args) => {

@@ -60,6 +60,23 @@ for (let i in pageList) {
 }
 document.getElementById('dashboard-pg').style.display = 'block';
 
+ipcRenderer.send('db-incomerecent-request', 'get most recent income');
+let recentIncomeData = ipcRenderer.on('db-incomerecent-reply', (event, args) => {
+    //blank for now
+});
+ipcRenderer.send('db-expenserecent-request', 'get expenses');
+let recentExpenseData = ipcRenderer.on('db-expenserecent-reply', (event, args) => {
+    
+});
+ipcRenderer.send('db-investmentrecent-request', 'get investments');
+let recentInvestmentData = ipcRenderer.on('db-investmentrecent-reply', (event, args) => {
+    
+});
+ipcRenderer.send('db-settingsrequest', 'get settings');
+let settingsData = ipcRenderer.on('db-settingsreply', (event, args) => {
+
+});
+
 // Graphing code
 (async function() {
     const data = [    //temporary until we have a method to fetch data from the database
