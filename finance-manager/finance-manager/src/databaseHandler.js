@@ -1,3 +1,5 @@
+import { get } from 'http';
+
 const { open } = require('sqlite');
 const sqlite3 = require('sqlite3');
 const fs = require('fs');
@@ -38,6 +40,20 @@ export async function createTables(db) {
         name TEXT NOT NULL,
         value TEXT NOT NULL
     )`);
+}
+
+export async function fixSettings(db) {
+    let settings = await db.all('SELECT * FROM settings');
+    let settingNames = settings.map((setting) => setting.name);
+    if (!settingNames.includes('stockAPIKey')) {
+        await db.run('INSERT INTO settings (name, value) VALUES (?, ?)', ['stockAPIKey', 'null']);
+    }
+    if (!settingNames.includes('incomeChartHLength')) {
+        await db.run('INSERT INTO settings (name, value) VALUES (?, ?)', ['incomeChartHLength', '1 month']);
+    }
+    if (!settingNames.includes('expenseChartHLength')) {
+        await db.run('INSERT INTO settings (name, value) VALUES (?, ?)', ['expenseChartHLength', '1 month']);
+    }
 }
 
 export async function insertExpense(db, name, amount, date, type) {
@@ -142,15 +158,15 @@ export async function sortInvestmentsByTime(db) {
 }
 
 export async function getMostRecentIncome(db, num) {
-    return await db.all('SELECT * FROM income ORDER BY date DESC LIMIT ?', [num]);
+    return await db.all('SELECT * FROM income WHERE date >= ?', [num]);
 }
 
 export async function getMostRecentExpenses(db, num) {
-    return await db.all('SELECT * FROM expenses ORDER BY date DESC LIMIT ?', [num]);
+    return await db.all('SELECT * FROM expenses WHERE date >= ?', [num]);
 }
 
 export async function getMostRecentInvestments(db, num) {
-    return await db.all('SELECT * FROM investments ORDER BY date DESC LIMIT ?', [num]);
+    return await db.all('SELECT * FROM investments WHERE date >= ?', [num]);
 }
 
 export async function getIncomeByType(db, type) {

@@ -6,7 +6,7 @@ const dbPath = app.getPath('userData')
 import icon from './icons/fmlogo.svg';
 //const pythonShell = require('python-shell');
 
-import DBHandler, { createTables, getIncome, getMostRecentIncome, initSql } from './databaseHandler.js';
+import * as DBHandler from './databaseHandler.js';
 //import pyScript from './StockAPI.py';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -58,58 +58,63 @@ app.whenReady().then(() => {
   ipcMain.on('init-sync', (event, args) => {
     console.log(args)
     window.webContents.send('init-sync', 'connected to main!');
-    const db = initSql(dbPath).then((db) => {
+    const db = DBHandler.initSql(dbPath).then((db) => {
       console.log("database initialized, creating tables if they don't exist");
-      createTables(db).then(() => {
+      DBHandler.createTables(db).then(() => {
         console.log("tables created (if they didn't exist)");
       });
       ipcMain.on('db-incomerecent-request', (event, args) => {
-          getMostRecentIncome(db, args).then((data) => {
+          DBHandler.getMostRecentIncome(db, args).then((data) => {
               console.log(data);
               window.webContents.send('db-incomerecent-reply', data);
           });
       })
       ipcMain.on('db-expense-request', (event, args) => {
-          getExpense(db, args).then((data) => {
+          DBHandler.getExpense(db, args).then((data) => {
               console.log(data);
               window.webContents.send('db-expense-reply', data);
           });
       })
       ipcMain.on('db-investment-request', (event, args) => {
-          getInvestment(db, args).then((data) => {
+          DBHandler.getInvestment(db, args).then((data) => {
               console.log(data);
               window.webContents.send('db-investment-reply', data);
           });
       })
-      ipcMain.on('db-setting-request', (event, args) => {
-          getSetting(db, args).then((data) => {
+      ipcMain.on('db-settings-request', (event, args) => {
+          DBHandler.fixSettings(db).then(() => {
+            console.log("settings fixed (if they were broken)");
+          });
+          DBHandler.getSettings(db).then((data) => {
               console.log(data);
               window.webContents.send('db-setting-reply', data);
+              window.webContents.send('db-setting-go', 'stupid ass timing hack');
           });
       });
       ipcMain.on('db-expense-insert', (event, args) => {
-          insertExpense(db, args[0], args[1], args[2], args[3]).then((data) => {
+          console.log(args);
+          DBHandler.insertExpense(db, args.name, args.amount, args.date, args.type).then((data) => {
               window.webContents.send('db-expense-insert-reply', data);
           });
       });
       ipcMain.on('db-income-insert', (event, args) => {
-          insertIncome(db, args[0], args[1], args[2], args[3]).then((data) => {
+          DBHandler.insertIncome(db, args[0], args[1], args[2], args[3]).then((data) => {
               window.webContents.send('db-income-insert-reply', data);
           });
       });
       ipcMain.on('db-investment-insert', (event, args) => {
-          insertInvestment(db, args[0], args[1], args[2]).then((data) => {
+          DBHandler.insertInvestment(db, args[0], args[1], args[2]).then((data) => {
               window.webContents.send('db-investment-insert-reply', data);
           });
       });
       ipcMain.on('db-setting-update', (event, args) => {
           if (args[1] = 'incomeChartHLength') {
-              updateSetting(db, 1, args[0], args[1]).then((data) => {
+              DBHandler.updateSetting(db, 1, args[0], args[1]).then((data) => {
                   window.webContents.send('db-setting-update-reply', data);
               });
           };
           if (args[1] = 'expenseChartHLength') {
-              updateSetting(db, 2, args[0], args[1]).then((data) => {
+              DBHandler.updateSetting(db, 2, args[0], args[1]).then((data) => {
                   window.webContents.send('db-setting-update-reply', data);
               });
           };

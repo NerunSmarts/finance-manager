@@ -20,7 +20,6 @@ const { ipcRenderer } = require('electron')
 var currentPageIndex = 0;
 var pageList = ['dashboard-pg', 'addincome-pg', 'addexpenses-pg', "investments-pg", "settings-pg"]; // final will be ['addincome-pg', 'addexpenses-pg', 'dashboard-pg', 'investments-pg', 'settings-pg']
 
-// inter-process communication test, will fix when we need data from the database.
 ipcRenderer.on('init-sync', (event, args) => {
   console.log(args)
 });
@@ -40,30 +39,89 @@ for (let i in pageList) {
 }
 document.getElementById('dashboard-pg').style.display = 'block';
 
-ipcRenderer.send('db-incomerecent-request', 'get most recent income');
-let recentIncomeData = ipcRenderer.on('db-incomerecent-reply', (event, args) => {
-    //blank for now
-    console.log(args);
-    return args;
-});
-ipcRenderer.send('db-expenserecent-request', 'get recent expenses');
-let recentExpenseData = ipcRenderer.on('db-expenserecent-reply', (event, args) => {
-    console.log(args);
-    return args;
-});
-ipcRenderer.send('db-investmentrecent-request', 'get recent investments');
-let recentInvestmentData = ipcRenderer.on('db-investmentrecent-reply', (event, args) => {
-    return args;
-});
-ipcRenderer.send('db-settingsrequest', 'get settings');
-let settingsData = ipcRenderer.on('db-settingsreply', (event, args) => {
-    return args;
-});
+function calculateTimesToGet(range) {
+    let currentTime = Math.floor(Date.now() / 1000);
+    switch (range) {
+        case '1 month':
+          let oneMonthAgo = currentTime - 2592000;
+          return oneMonthAgo;
+        case '3 months':
+          let threeMonthsAgo = currentTime - 7776000;
+          return threeMonthsAgo;
+        case '6 months':
+          let sixMonthsAgo = currentTime - 15552000;
+          return sixMonthsAgo;
+        case '1 year':
+          let oneYearAgo = currentTime - 31536000;
+          return oneYearAgo;
+        case '2 years':
+          let twoYearsAgo = currentTime - 63072000;
+          return twoYearsAgo;
+        case '5 years':
+          let fiveYearsAgo = currentTime - 157680000;
+          return fiveYearsAgo;
+        default:
+          console.error('Invalid range: ' + range);
+          return currentTime - 2592000;
+    }
+} 
 
+function calculateMonthsSinceTimestamp(timestamp) {
+  let months = [];
+  let currentTime = new Date();
+  let startDate = new Date(timestamp * 1000); // Convert timestamp to milliseconds
 
+  while (startDate <= currentTime) {
+      let month = startDate.toLocaleString('default', { month: 'long' });
+      let startTimestamp = Math.floor(startDate.getTime() / 1000); // Convert to seconds
+      let endDate = new Date(startDate);
+      endDate.setMonth(endDate.getMonth() + 1);
+      endDate.setDate(0); // Set to the last day of the previous month
+      let endTimestamp = Math.floor(endDate.getTime() / 1000); // Convert to seconds
+
+      months.push({
+          month: month,
+          startTimestamp: startTimestamp,
+          endTimestamp: endTimestamp
+      });
+
+      startDate.setMonth(startDate.getMonth() + 1);
+  }
+
+  return months;
+}
 
 // Graphing code
-(async function(recentIncomeData, recentExpenseData, recentInvestmentData) {
+(async function() {
+    let incomeRange, expenseRange, investmentRange;
+    ipcRenderer.send('db-settings-request', 'get all');
+    let settingsData = ipcRenderer.on('db-settings-reply', (event, args) => {
+        incomeRange = args.find(setting => setting.name === 'incomeChartHLength').value;
+        expenseRange = args.find(setting => setting.name === 'expenseChartHLength').value;
+        investmentRange = args.find(setting => setting.name === 'investmentChartHLength').value;
+        console.log(incomeRange, expenseRange, investmentRange);
+        return args;
+    });
+    ipcRenderer.on('db-settings-go', (event, args) => {
+    ipcRenderer.send('db-incomerecent-request', calculateTimesToGet(incomeRange));
+    let recentIncomeData = ipcRenderer.on('db-incomerecent-reply', (event, args) => {
+        //blank for now
+        console.log(args);
+        return args;
+    });
+    ipcRenderer.send('db-expenserecent-request', calculateTimesToGet(expenseRange));
+    let recentExpenseData = ipcRenderer.on('db-expenserecent-reply', (event, args) => {
+        console.log(args);
+        return args;
+    });
+    ipcRenderer.send('db-investmentrecent-request', calculateTimesToGet(investmentRange));
+    let recentInvestmentData = ipcRenderer.on('db-investmentrecent-reply', (event, args) => {
+        return args;
+    });
+    
+    let oldestTimestamp = Math.min(calculateTimesToGet(incomeRange), calculateTimesToGet(expenseRange), calculateTimesToGet(investmentRange));
+    let monthsToShow = calculateMonthsSinceTimestamp(oldestTimestamp);
+
     const data = [    //temporary until we have a method to fetch data from the database
       { year: 2010, count: 10 },
       { year: 2011, count: 20 },
@@ -79,7 +137,7 @@ let settingsData = ipcRenderer.on('db-settingsreply', (event, args) => {
       {
         type: 'bar',
         data: {
-          labels: data.map(row => row.year),
+          labels: monthsToShow,
           datasets: [
             {
               label: 'Acquisitions by year',
@@ -88,11 +146,22 @@ let settingsData = ipcRenderer.on('db-settingsreply', (event, args) => {
           ]
         },
         options: {
-          responsive: true
-        }
+          plugins: {
+            
+          },
+          responsive: true,
+          scales:{
+            x: {
+              stacked: true
+            },
+            y: {
+              stacked: true
+            }
+          }
+        },
       }
     );
-    
+  });
   })();
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
@@ -189,6 +258,11 @@ document.getElementById('expenseSubmitBtn').submitExpense = () => {
     } else {
         ipcRenderer.send('db-expense-insert', {name, amount, date, type});
         console.log('expense submitted');
+        document.getElementById('expenseNameIn').value = '';
+        document.getElementById('expenseAmountIn').value = '';
+        document.getElementById('expenseDateIn').value = '';
+        document.getElementById('expenseTimeIn').value = '';
+        document.getElementById('expenseTypeIn').value = 'One time expense';
     }
 };
 document.getElementById('incomeSubmitBtn').submitIncome = () => {
