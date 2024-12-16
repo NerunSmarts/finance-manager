@@ -54,6 +54,9 @@ export async function fixSettings(db) {
     if (!settingNames.includes('expenseChartHLength')) {
         await db.run('INSERT INTO settings (name, value) VALUES (?, ?)', ['expenseChartHLength', '1 month']);
     }
+    if (!settingNames.includes('investmentChartHLength')) {
+        await db.run('INSERT INTO settings (name, value) VALUES (?, ?)', ['investmentChartHLength', '1 month']);
+    }
 }
 
 export async function insertExpense(db, name, amount, date, type) {

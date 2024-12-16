@@ -69,6 +69,16 @@ app.whenReady().then(() => {
               window.webContents.send('db-incomerecent-reply', data);
           });
       })
+      ipcMain.on('db-expenserecent-request', (event, args) => {
+          DBHandler.getMostRecentExpenses(db, args).then((data) => {
+              window.webContents.send('db-expenserecent-reply', data);
+          });
+      })
+      ipcMain.on('db-investmentrecent-request', (event, args) => {
+          DBHandler.getMostRecentInvestments(db, args).then((data) => {
+              window.webContents.send('db-investmentrecent-reply', data);
+          });
+      })
       ipcMain.on('db-expense-request', (event, args) => {
           DBHandler.getExpense(db, args).then((data) => {
               console.log(data);
@@ -87,8 +97,8 @@ app.whenReady().then(() => {
           });
           DBHandler.getSettings(db).then((data) => {
               console.log(data);
-              window.webContents.send('db-setting-reply', data);
-              window.webContents.send('db-setting-go', 'stupid ass timing hack');
+              window.webContents.send('db-settings-reply', data);
+              window.webContents.send('db-settings-go', 'stupid ass timing hack');
           });
       });
       ipcMain.on('db-expense-insert', (event, args) => {
@@ -98,7 +108,8 @@ app.whenReady().then(() => {
           });
       });
       ipcMain.on('db-income-insert', (event, args) => {
-          DBHandler.insertIncome(db, args[0], args[1], args[2], args[3]).then((data) => {
+          console.log(args);
+          DBHandler.insertIncome(db, args.name, args.amount, args.date, args.type).then((data) => {
               window.webContents.send('db-income-insert-reply', data);
           });
       });
@@ -108,16 +119,21 @@ app.whenReady().then(() => {
           });
       });
       ipcMain.on('db-setting-update', (event, args) => {
-          if (args[1] = 'incomeChartHLength') {
-              DBHandler.updateSetting(db, 1, args[0], args[1]).then((data) => {
+          if (args.name = 'incomeChartHLength') {
+              DBHandler.updateSetting(db, 1, args.name, args.value).then((data) => {
                   window.webContents.send('db-setting-update-reply', data);
               });
           };
-          if (args[1] = 'expenseChartHLength') {
-              DBHandler.updateSetting(db, 2, args[0], args[1]).then((data) => {
+          if (args.name = 'expenseChartHLength') {
+              DBHandler.updateSetting(db, 2, args.name, args.value).then((data) => {
                   window.webContents.send('db-setting-update-reply', data);
               });
           };
+      });
+      ipcMain.on('db-expenseall-request', (event, args) => {
+          DBHandler.getAllExpenses(db).then((data) => {
+              window.webContents.send('db-expenseall-reply', data);
+          });
       });
     });
   });

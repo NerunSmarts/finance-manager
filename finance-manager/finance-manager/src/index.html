@@ -18,7 +18,7 @@
           <center>
           <div class="income-block">
             <center><p class="heading">Total Income:</p></center>
-            <canvas id = "incomeChart"></canvas>
+            <canvas id = "dashboardChart"></canvas>
             <p class="paragraph">Income per year:</p>
             <p class="paragraph">Income per month:</p>
             <p class="paragraph">Income per week:</p>
@@ -28,7 +28,7 @@
 
           <div class = "expenses-block">
             <center><p class="heading">Total Expenses:</p></center>
-            <canvas id ="incomeChart"></canvas>
+            <canvas id ="expenseChart"></canvas>
             <p class="paragraph">Monthly expenses (recurring):</p>
             <p class="paragraph">Yearly expenses (recurring):</p>
             <p class="paragraph">Average expenses per month:</p>
@@ -62,27 +62,27 @@
         <button class="uicontrols">Delete income</button>
         <div class="income-dialog" id="incdialog">
           <p class="paragraph">Income name:</p>
-          <input></input>
+          <input id="incomeNameIn"></input>
           <p class="paragraph">Income amount:</p>
-          <input></input>
+          <input id="incomeAmountIn"></input>
           <p class="paragraph">Income date (MM-DD-YYYY):</p>
-          <input></input>
+          <input id="incomeDateIn"></input>
           <p class = "paragraph">Income time (optional, HH:MM:SS):</p>
-          <input></input>
+          <input id="incomeTimeIn"></input>
           <p class="paragraph">Income type:</p>
-          <select class="uicontrols">
+          <select class="uicontrols" id="incomeTypeIn">
             <option>One time income</option>
             <option>Monthly recurring income (starting today)</option>
           </select>
           <br>
           <br>
-          <button class="uicontrols" id="incomeSubmitBtn">Submit</button>
+          <button class="uicontrols" id="incomeSubmitBtn" onclick="this.submitIncome()">Submit</button>
           <button onclick="document.getElementById('incdialog').style.display = 'none';" class="uicontrols">Cancel</button>
         </div>
 
 
         <div class="statistics">
-          <canvas id="expenseschart"></canvas>
+          <canvas id="incomePageChart"></canvas>
           <center><h1 class="heading">Total income:</h1></center>
           <p class="paragraph">Monthly income (recurring):</p>
           <p class="paragraph">Yearly income (recurring):</p>
@@ -128,7 +128,7 @@
 
 
         <div class="statistics">
-          <canvas id="expenseschart"></canvas>
+          <canvas id="expensePageChart"></canvas>
           <center><h1 class="heading">Total expenses:</h1></center>
           <p class="paragraph">Monthly expenses (recurring):</p>
           <p class="paragraph">Yearly expenses (recurring):</p>
@@ -153,7 +153,7 @@
         <button class="uicontrols" id="investmentSubmitBtn">Update</button>
 
         <div class="statistics" id = "statistics">
-          <canvas id = "incomeChart"></canvas>
+          <canvas id = "investmentChart"></canvas>
           <center><h1 class="heading">Current Stock Price:</h1></center>
           <p class="paragraph">Average return per year:</p>
           <p class="paragraph">Average return per month:</p>
@@ -175,7 +175,7 @@
             <option>2 years</option>
             <option>5 years</option>
           </select>
-          <button class="uicontrols" id="incomeChartLengthSubmit">Apply</button>
+          <button class="uicontrols" id="incomeChartLengthSubmit" onclick="this.submitSettings()">Apply</button>
           <p class="paragraph">Recent expenses chart history length:</p><select class="uicontrols" id="expensesChartLengthIn">
             <option>1 month</option>
             <option>3 months</option>
@@ -184,7 +184,7 @@
             <option>2 years</option>
             <option>5 years</option>
           </select>
-          <button class="uicontrols" id="expensesChartLengthSubmit">Apply</button>
+          <button class="uicontrols" id="expensesChartLengthSubmit" onclick="this.submitSettings()">Apply</button>
       </div>
     <aside>
       <div class="nav-bar-container">
