@@ -106,8 +106,13 @@ app.whenReady().then(() => {
           if (args[1] = 'incomeChartHLength') {
               updateSetting(db, 1, args[0], args[1]).then((data) => {
                   window.webContents.send('db-setting-update-reply', data);
-              }
-          }
+              });
+          };
+          if (args[1] = 'expenseChartHLength') {
+              updateSetting(db, 2, args[0], args[1]).then((data) => {
+                  window.webContents.send('db-setting-update-reply', data);
+              });
+          };
       });
     });
   });
