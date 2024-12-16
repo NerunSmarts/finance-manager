@@ -65,6 +65,10 @@
           <input></input>
           <p class="paragraph">Income amount:</p>
           <input></input>
+          <p class="paragraph">Income date (MM-DD-YYYY):</p>
+          <input></input>
+          <p class = "paragraph">Income time (optional, HH:MM:SS):</p>
+          <input></input>
           <p class="paragraph">Income type:</p>
           <select class="uicontrols">
             <option>One time income</option>
@@ -72,7 +76,7 @@
           </select>
           <br>
           <br>
-          <button class="uicontrols">Submit</button>
+          <button class="uicontrols" id="incomeSubmitBtn">Submit</button>
           <button onclick="document.getElementById('incdialog').style.display = 'none';" class="uicontrols">Cancel</button>
         </div>
 
@@ -103,18 +107,22 @@
         <button class="uicontrols">Delete expense</button>
         <div class="expense-dialog" id="expdialog">
           <p class="paragraph">Expense name:</p>
-          <input></input>
+          <input id="expenseNameIn"></input>
           <p class="paragraph">Expense amount:</p>
-          <input></input>
+          <input id="expenseAmountIn"></input>
+          <p class="paragraph">Expense date (MM-DD-YYYY):</p>
+          <input id="expenseDateIn"></input>
+          <p class = "paragraph">Expense time (optional, HH:MM:SS):</p>
+          <input id="expenseTimeIn"></input>
           <p class="paragraph">Expense type:</p>
-          <select class="uicontrols">
+          <select class="uicontrols" id="expenseTypeIn">
             <option>One time expense</option>
             <option>Monthly recurring expense (starting today)</option>
             <option>Yearly recurring expense (starting today)</option>
           </select>
           <br>
           <br>
-          <button class="uicontrols">Submit</button>
+          <button class="uicontrols" id="expenseSubmitBtn" onclick="this.submitExpense()">Submit</button>
           <button onclick="document.getElementById('expdialog').style.display = 'none';" class="uicontrols">Cancel</button>
         </div>
 
@@ -133,14 +141,16 @@
       <div class="investments-pg" id = "investments-pg">
         <img>
         <p class="paragraph">Ticker:</p>
-        <input class="uicontrols"></input>
+        <input class="uicontrols" id="investmentTickerIn"></input>
         <p class="paragraph">Amount:</p>
-        <input class="uicontrols"></input>
+        <input class="uicontrols" id="investmentAmountIn"></input>
         <p class="paragraph">Date (MM-DD-YYYY):</p>
-        <input class="uicontrols"></input>
+        <input class="uicontrols" id="investmentDateIn"></input>
+        <p class="paragraph">Time (optional, HH:MM:SS):</p>
+        <input class="uicontrols" id="investmentTimeIn"></input>
         <br>
         <br>
-        <button class="uicontrols">Update</button>
+        <button class="uicontrols" id="investmentSubmitBtn">Update</button>
 
         <div class="statistics" id = "statistics">
           <canvas id = "incomeChart"></canvas>
@@ -155,8 +165,26 @@
       </div>
       <div class="settings-pg" id = "settings-pg">
           <p class="heading">Settings</p>
-          <p class="paragraph">Twelvedata API key (demo key:  a17e94cd212b48f5a888d6ced4b63844):</p><input></input>
-          <button class="uicontrols">Apply</button>
+          <p class="paragraph">Twelvedata API key (demo key:  a17e94cd212b48f5a888d6ced4b63844):</p><input id="apiKeyIn"></input>
+          <button class="uicontrols" id="apiKeySubmit">Apply</button>
+          <p class="paragraph">Recent income chart history length:</p><select class="uicontrols" id="incomeChartLengthIn">
+            <option>1 month</option>
+            <option>3 months</option>
+            <option>6 months</option>
+            <option>1 year</option>
+            <option>2 years</option>
+            <option>5 years</option>
+          </select>
+          <button class="uicontrols" id="incomeChartLengthSubmit">Apply</button>
+          <p class="paragraph">Recent expenses chart history length:</p><select class="uicontrols" id="expensesChartLengthIn">
+            <option>1 month</option>
+            <option>3 months</option>
+            <option>6 months</option>
+            <option>1 year</option>
+            <option>2 years</option>
+            <option>5 years</option>
+          </select>
+          <button class="uicontrols" id="expensesChartLengthSubmit">Apply</button>
       </div>
     <aside>
       <div class="nav-bar-container">

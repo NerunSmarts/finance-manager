@@ -4,26 +4,6 @@
  * Electron, visit:
  *
  * https://electronjs.org/docs/tutorial/application-architecture#main-and-renderer-processes
- *
- * By default, Node.js integration in this file is disabled. When enabling Node.js integration
- * in a renderer process, please be aware of potential security implications. You can read
- * more about security risks here:
- *
- * https://electronjs.org/docs/tutorial/security
- *
- * To enable Node.js integration in this file, open up `main.js` and enable the `nodeIntegration`
- * flag:
- *
- * ```
- *  // Create the browser window.
- *  mainWindow = new BrowserWindow({
- *    width: 800,
- *    height: 600,
- *    webPreferences: {
- *      nodeIntegration: true
- *    }
- *  });
- * ```
  */
 
 import './index.css';
@@ -63,22 +43,27 @@ document.getElementById('dashboard-pg').style.display = 'block';
 ipcRenderer.send('db-incomerecent-request', 'get most recent income');
 let recentIncomeData = ipcRenderer.on('db-incomerecent-reply', (event, args) => {
     //blank for now
+    console.log(args);
+    return args;
 });
-ipcRenderer.send('db-expenserecent-request', 'get expenses');
+ipcRenderer.send('db-expenserecent-request', 'get recent expenses');
 let recentExpenseData = ipcRenderer.on('db-expenserecent-reply', (event, args) => {
-    
+    console.log(args);
+    return args;
 });
-ipcRenderer.send('db-investmentrecent-request', 'get investments');
+ipcRenderer.send('db-investmentrecent-request', 'get recent investments');
 let recentInvestmentData = ipcRenderer.on('db-investmentrecent-reply', (event, args) => {
-    
+    return args;
 });
 ipcRenderer.send('db-settingsrequest', 'get settings');
 let settingsData = ipcRenderer.on('db-settingsreply', (event, args) => {
-
+    return args;
 });
 
+
+
 // Graphing code
-(async function() {
+(async function(recentIncomeData, recentExpenseData, recentInvestmentData) {
     const data = [    //temporary until we have a method to fetch data from the database
       { year: 2010, count: 10 },
       { year: 2011, count: 20 },
@@ -101,6 +86,9 @@ let settingsData = ipcRenderer.on('db-settingsreply', (event, args) => {
               data: data.map(row => row.count)
             }
           ]
+        },
+        options: {
+          responsive: true
         }
       }
     );
@@ -158,4 +146,65 @@ document.getElementById('investIconO').invButtonF = () => {
     switchOnClick();
 }
 
+function calendarToUnixTime(dateString, timeString) {
+    // Split the input date string into parts
+    let [month, day, year] = dateString.split('-').map(Number);
+    // Create a Date object
+    let dateArray = new Date(year, month - 1, day); // Month is zero-based in JavaScript Date (what the hell)
+    if (timeString !== '') {
+      // Split the input time string into parts
+      let [hours, minutes, seconds] = timeString.split(':').map(Number);
+      // Set the time in the Date object
+      dateArray.setHours(hours, minutes, seconds);
+    }
+    // Get the Unix timestamp (in seconds, dividing by 1000)
+    let unixTime = Math.floor(dateArray.getTime() / 1000);
+    if (isNaN(unixTime)) {
+      throw new Error('Invalid date or time');
+    } else {
+      console.log(unixTime);
+      return unixTime;
+    }
+}
 
+document.getElementById('expenseSubmitBtn').submitExpense = () => {
+    let error = false;
+    let date = 0;
+    // get the values from the form
+    let name = document.getElementById('expenseNameIn').value;
+    let amount = document.getElementById('expenseAmountIn').value;
+    let dateIn = document.getElementById('expenseDateIn').value;
+    let timeIn = document.getElementById('expenseTimeIn').value;
+    let type = document.getElementById('expenseTypeIn').value;
+
+    try {
+        date = calendarToUnixTime(dateIn, timeIn);
+        amount = parseFloat(amount);
+    } catch (e) {
+        console.error(e);
+        error = true;
+    }
+    if (error || name === '' || amount === '' || date === 0 || type === '' || isNaN(date) || isNaN(amount)) {
+        console.error('Error submitting expense, aborted');
+    } else {
+        ipcRenderer.send('db-expense-insert', {name, amount, date, type});
+        console.log('expense submitted');
+    }
+};
+document.getElementById('incomeSubmitBtn').submitIncome = () => {
+    // get the values from the form
+    ipcRenderer.send('db-income-insert', {name, amount, date, type});
+    console.log('income submitted');
+};
+document.getElementById('investmentSubmitBtn').submitInvestment = () => {
+    // get the values from the form
+    ipcRenderer.send('db-investment-insert', {ticker, amount, date});
+    console.log('investment submitted');
+};
+document.getElementById('incomeChartLengthSubmit').submitSettings = () => {
+    // get the values from the form
+    let name = 'incomeChartHLength';
+    let value = document.getElementById('incomeChartLengthIn').value;
+    ipcRenderer.send('db-setting-update', {name, value});
+    console.log('settings submitted');
+};
