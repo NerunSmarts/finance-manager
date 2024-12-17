@@ -19,11 +19,10 @@
           <div class="income-block">
             <center><p class="heading">Total Income:</p></center>
             <canvas id = "dashboardChart"></canvas>
-            <p class="paragraph">Income per year:</p>
-            <p class="paragraph">Income per month:</p>
-            <p class="paragraph">Income per week:</p>
-            <p class="paragraph">Income per month:</p>
-            <p class="paragraph">Income per day:</p>
+            <p class="paragraph" id="incPY">Income per year:</p>
+            <p class="paragraph" id="incPM">Income per month:</p>
+            <p class="paragraph" id="incPW">Income per week:</p>
+            <p class="paragraph" id="incPD">Income per day:</p>
           </div>
 
           <div class = "expenses-block">
@@ -167,7 +166,7 @@
           <p class="heading">Settings</p>
           <p class="paragraph">Twelvedata API key (demo key:  a17e94cd212b48f5a888d6ced4b63844):</p><input id="apiKeyIn"></input>
           <button class="uicontrols" id="apiKeySubmit">Apply</button>
-          <p class="paragraph">Recent income chart history length:</p><select class="uicontrols" id="incomeChartLengthIn">
+          <p class="paragraph">Chart history length:</p><select class="uicontrols" id="incomeChartLengthIn">
             <option>1 month</option>
             <option>3 months</option>
             <option>6 months</option>
@@ -176,15 +175,6 @@
             <option>5 years</option>
           </select>
           <button class="uicontrols" id="incomeChartLengthSubmit" onclick="this.submitSettings()">Apply</button>
-          <p class="paragraph">Recent expenses chart history length:</p><select class="uicontrols" id="expensesChartLengthIn">
-            <option>1 month</option>
-            <option>3 months</option>
-            <option>6 months</option>
-            <option>1 year</option>
-            <option>2 years</option>
-            <option>5 years</option>
-          </select>
-          <button class="uicontrols" id="expensesChartLengthSubmit" onclick="this.submitSettings()">Apply</button>
       </div>
     <aside>
       <div class="nav-bar-container">

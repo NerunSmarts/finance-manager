@@ -67,6 +67,29 @@ function calculateTimesToGet(range) {
           return currentTime - 2592000;
     }
 } 
+function calculateWeeksSinceTimestamp (timestamp) {
+    let weeks = [];
+    let currentTime = new Date();
+    let startDate = new Date(timestamp * 1000); // Convert timestamp to milliseconds
+
+    while (startDate <= currentTime) {
+        let week = startDate.toLocaleString('default', { month: 'short', day: 'numeric' });
+        let startTimestamp = Math.floor(startDate.getTime() / 1000); // Convert to seconds
+        let endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + 7);
+        endDate.setHours(0, 0, 0, -1); // Set to the last millisecond of the previous day
+        let endTimestamp = Math.floor(endDate.getTime() / 1000); // Convert to seconds
+
+        weeks.push({
+            week: week,
+            startTimestamp: startTimestamp,
+            endTimestamp: endTimestamp
+        });
+
+        startDate.setDate(startDate.getDate() + 7);
+    }
+    return weeks;
+}
 
 function calculateMonthsSinceTimestamp(timestamp) {
   let months = [];
@@ -94,8 +117,70 @@ function calculateMonthsSinceTimestamp(timestamp) {
 
   return months;
 }
+function calculateYearsSinceTimestamp (timestamp) {
+    let years = [];
+    let currentTime = new Date();
+    let startDate = new Date(timestamp * 1000); // Convert timestamp to milliseconds
 
-function rebuildArrayForDashChart(expenseData, incomeData, months) {
+    while (startDate <= currentTime) {
+        let year = startDate.toLocaleString('default', { year: 'numeric' });
+        let startTimestamp = Math.floor(startDate.getTime() / 1000); // Convert to seconds
+        let endDate = new Date(startDate);
+        endDate.setFullYear(endDate.getFullYear() + 1);
+        endDate.setDate(1); // Set to the first day of the next month
+        endDate.setHours(0, 0, 0, -1); // Set to the last millisecond of the previous day
+        let endTimestamp = Math.floor(endDate.getTime() / 1000); // Convert to seconds
+
+        years.push({
+            year: year,
+            startTimestamp: startTimestamp,
+            endTimestamp: endTimestamp
+        });
+
+        startDate.setFullYear(startDate.getFullYear() + 1);
+        startDate.setDate(1); // Ensure the start date is set to the first day of the month
+    }
+
+    return years;
+}
+function rebuildArrayForWeekDashChart(expenseData, incomeData, weeks) {
+  let weeklyData = weeks.map(week => ({
+    week: week.week,
+    gains: 0,
+    losses: 0
+  }));
+
+  for (let income of incomeData) {
+    let incomeDate = new Date(income.date * 1000);
+    for (let week of weeks) {
+      if (income.date >= week.startTimestamp && income.date <= week.endTimestamp) {
+        let weekData = weeklyData.find(w => w.week === week.week);
+        if (weekData) {
+          weekData.gains += income.amount;
+        }
+        break;
+      }
+    }
+  }
+
+  for (let expense of expenseData) {
+    let expenseDate = new Date(expense.date * 1000);
+    for (let week of weeks) {
+      if (expense.date >= week.startTimestamp && expense.date <= week.endTimestamp) {
+        let weekData = weeklyData.find(w => w.week === week.week);
+        if (weekData) {
+          weekData.losses -= expense.amount;
+        }
+        break;
+      }
+    }
+  }
+
+  console.log('Weekly Data:', weeklyData);
+  return weeklyData;
+}
+
+function rebuildArrayForMonthDashChart(expenseData, incomeData, months) {
   let monthlyData = months.map(month => ({
     month: month.month,
     gains: 0,
@@ -123,7 +208,57 @@ function rebuildArrayForDashChart(expenseData, incomeData, months) {
   return monthlyData;
 }
 
-function rebuildArrayForChart(data, months) {
+function rebuildArrayForYearDashChart (expenseData, incomeData, years) {
+  let yearlyData = years.map(year => ({
+    year: year.year,
+    gains: 0,
+    losses: 0
+  }));
+
+  for (let income in incomeData) {
+    let incomeDate = new Date(incomeData[income].date * 1000);
+    let incomeYear = incomeDate.toLocaleString('default', { year: 'numeric' });
+    let yearData = yearlyData.find(year => year.year === incomeYear);
+    if (yearData) {
+      yearData.gains += incomeData[income].amount;
+    }
+  }
+
+  for (let expense in expenseData) {
+    let expenseDate = new Date(expenseData[expense].date * 1000);
+    let expenseYear = expenseDate.toLocaleString('default', { year: 'numeric' });
+    let yearData = yearlyData.find(year => year.year === expenseYear);
+    if (yearData) {
+      yearData.losses -= expenseData[expense].amount;
+    }
+  }
+
+  return yearlyData;
+}
+
+function rebuildArrayForWeekChart(data, weeks) {
+  let weeklyData = weeks.map(week => ({
+    week: week.week,
+    amount: 0
+  }));
+
+  for (let item of data) {
+    let itemDate = new Date(item.date * 1000);
+    for (let week of weeks) {
+      if (item.date >= week.startTimestamp && item.date <= week.endTimestamp) {
+        let weekData = weeklyData.find(w => w.week === week.week);
+        if (weekData) {
+          weekData.amount += item.amount;
+        }
+        break;
+      }
+    }
+  }
+
+  console.log('Weekly Data:', weeklyData);
+  return weeklyData;
+}
+function rebuildArrayForMonthChart(data, months) {
   let monthlyData = months.map(month => ({
     month: month.month,
     amount: 0
@@ -141,13 +276,34 @@ function rebuildArrayForChart(data, months) {
   return monthlyData;
 }
 
+function rebuildArrayForYearChart(data, years) {
+  let yearlyData = years.map(year => ({
+    year: year.year,
+    amount: 0
+  }));
+
+  for (let item in data) {
+    let itemDate = new Date(data[item].date * 1000);
+    let itemYear = itemDate.toLocaleString('default', { year: 'numeric' });
+    let yearData = yearlyData.find(year => year.year === itemYear);
+    if (yearData) {
+      yearData.amount += data[item].amount;
+    }
+  }
+
+  return yearlyData;
+}
+
+let dashChart, expenseChart, incomeChart, expensePageChart, incomePageChart;
+let labels, incomeDataForChart, expenseDataForChart, combinedData;
+let ready = false;
 // Graphing code
-(async function() {
+async function updateAll() {
   let incomeRange, expenseRange, investmentRange;
 
   // Request settings data
   ipcRenderer.send('db-settings-request', 'get all');
-  const settingsData = await new Promise((resolve) => {
+  let settingsData = await new Promise((resolve) => {
       ipcRenderer.on('db-settings-reply', (event, args) => {
           incomeRange = args.find(setting => setting.name === 'incomeChartHLength').value;
           expenseRange = args.find(setting => setting.name === 'expenseChartHLength').value;
@@ -158,11 +314,10 @@ function rebuildArrayForChart(data, months) {
 
   console.log(settingsData);
   document.getElementById('incomeChartLengthIn').value = incomeRange;
-  document.getElementById('expensesChartLengthIn').value = expenseRange;
   console.log(incomeRange, expenseRange, investmentRange);
 
   // Request recent data
-  const recentIncomeData = new Promise((resolve) => {
+  let recentIncomeData = new Promise((resolve) => {
       ipcRenderer.send('db-incomerecent-request', calculateTimesToGet(incomeRange));
       ipcRenderer.on('db-incomerecent-reply', (event, args) => {
           console.log(args);
@@ -170,16 +325,16 @@ function rebuildArrayForChart(data, months) {
       });
   });
 
-  const recentExpenseData = new Promise((resolve) => {
-      ipcRenderer.send('db-expenserecent-request', calculateTimesToGet(expenseRange));
+  let recentExpenseData = new Promise((resolve) => {
+      ipcRenderer.send('db-expenserecent-request', calculateTimesToGet(incomeRange));
       ipcRenderer.on('db-expenserecent-reply', (event, args) => {
           console.log(args);
           resolve(args);
       });
   });
 
-  const recentInvestmentData = new Promise((resolve) => {
-      ipcRenderer.send('db-investmentrecent-request', calculateTimesToGet(investmentRange));
+  let recentInvestmentData = new Promise((resolve) => {
+      ipcRenderer.send('db-investmentrecent-request', calculateTimesToGet(incomeRange));
       ipcRenderer.on('db-investmentrecent-reply', (event, args) => {
           console.log(args);
           resolve(args);
@@ -187,32 +342,80 @@ function rebuildArrayForChart(data, months) {
   });
 
   // Wait for all data to be received
-  const [incomeData, expenseData, investmentData] = await Promise.all([recentIncomeData, recentExpenseData, recentInvestmentData]);
+  let [incomeData, expenseData, investmentData] = await Promise.all([recentIncomeData, recentExpenseData, recentInvestmentData]);
 
   console.log('All data received');
   let oldestTimestamp = Math.min(calculateTimesToGet(incomeRange), calculateTimesToGet(expenseRange), calculateTimesToGet(investmentRange));
+  let weeksToShow = calculateWeeksSinceTimestamp(oldestTimestamp);
   let monthsToShow = calculateMonthsSinceTimestamp(oldestTimestamp);
-  monthsToShow = monthsToShow.slice(1, monthsToShow.length); // Remove the first month to fix an off by one because i hate myself.
-  const monthlyData = rebuildArrayForDashChart(expenseData, incomeData, monthsToShow);
-  const incomeDataForChart = rebuildArrayForChart(incomeData, monthsToShow);
-  const expenseDataForChart = rebuildArrayForChart(expenseData, monthsToShow);
+  let yearsToShow = calculateYearsSinceTimestamp(oldestTimestamp);
+  weeksToShow = weeksToShow.slice(1, weeksToShow.length); // Remove the first week to fix an off by one because i hate myself.
+  monthsToShow = monthsToShow.slice(1, monthsToShow.length); // Remove the first month to fix an off by one
+  yearsToShow = yearsToShow.slice(1, yearsToShow.length); // Remove the first year to fix an off by one
 
+  if (incomeRange === '3 months' || incomeRange === '6 months' || incomeRange === '1 year') {
+    incomeDataForChart = rebuildArrayForMonthChart(incomeData, monthsToShow);
+    expenseDataForChart = rebuildArrayForMonthChart(expenseData, monthsToShow);
+    combinedData = rebuildArrayForMonthDashChart(expenseData, incomeData, monthsToShow);
+    labels = monthsToShow.map(row => row.month);
+  } else if (incomeRange === '2 years' || incomeRange === '5 years') {
+    incomeDataForChart = rebuildArrayForYearChart(incomeData, yearsToShow);
+    expenseDataForChart = rebuildArrayForYearChart(expenseData, yearsToShow);
+    combinedData = rebuildArrayForYearDashChart(expenseData, incomeData, yearsToShow);
+    labels = yearsToShow.map(row => row.year);
+  } else if (incomeRange === '1 month') {
+    incomeDataForChart = rebuildArrayForWeekChart(incomeData, weeksToShow);
+    expenseDataForChart = rebuildArrayForWeekChart(expenseData, weeksToShow);
+    combinedData = rebuildArrayForWeekDashChart(expenseData, incomeData, weeksToShow);
+    labels = weeksToShow.map(row => row.week);
+  }
+  ready = true;
+  try {
+  dashChart.data.labels = labels;
+  dashChart.data.datasets[0].data = combinedData.map(row => row.gains);
+  dashChart.data.datasets[1].data = combinedData.map(row => row.losses);
+  expenseChart.data.labels = labels;
+  expenseChart.data.datasets[0].data = expenseDataForChart.map(row => row.amount);
+  incomeChart.data.labels = labels;
+  incomeChart.data.datasets[0].data = incomeDataForChart.map(row => row.amount);
+  expensePageChart.data.labels = labels;
+  expensePageChart.data.datasets[0].data = expenseDataForChart.map(row => row.amount);
+  incomePageChart.data.labels = labels;
+  incomePageChart.data.datasets[0].data = incomeDataForChart.map(row => row.amount);
+  dashChart.update();
+  expenseChart.update();
+  incomeChart.update();
+  expensePageChart.update();
+  incomePageChart.update();
+  } catch (e) {
+    console.error(e);
+    console.log('Charts not ready');
+  }
+};
+updateAll().then(() => {
+initGraphs();
+updateAll();
+});
+
+
+async function initGraphs() {
+  if (ready) {
   // Build the chart
-  new Chart(
+dashChart = new Chart(
       document.getElementById('dashboardChart'),
       {
           type: 'bar',
           data: {
-              labels: monthlyData.map(row => row.month),
+              labels: labels,
               datasets: [
                   {
-                      label: 'Gains',
-                      data: monthlyData.map(row => row.gains),
+                      label: 'Income',
+                      data: combinedData.map(row => row.gains),
                       backgroundColor: 'rgba(75, 192, 192, 1)'
                   },
                   {
-                      label: 'Losses',
-                      data: monthlyData.map(row => row.losses),
+                      label: 'Spendings',
+                      data: combinedData.map(row => row.losses),
                       backgroundColor: 'rgba(255, 99, 132, 1)'
                   }
               ]
@@ -231,12 +434,12 @@ function rebuildArrayForChart(data, months) {
           }
       }
   );
-  new Chart(
+expenseChart = new Chart(
     document.getElementById('expenseChart'),
     {
         type: 'line',
         data: {
-            labels: expenseDataForChart.map(row => row.month),
+            labels: labels,
             datasets: [
                 {
                     label: 'Expenses',
@@ -253,12 +456,12 @@ function rebuildArrayForChart(data, months) {
             }
       }
   );
-  new Chart(
+expensePageChart = new Chart(
     document.getElementById('expensePageChart'),
     {
         type: 'line',
         data: {
-            labels: expenseDataForChart.map(row => row.month),
+            labels: labels,
             datasets: [
                 {
                     label: 'Expenses',
@@ -276,12 +479,12 @@ function rebuildArrayForChart(data, months) {
       }
   );
 
-  new Chart(
+incomePageChart = new Chart(
     document.getElementById('incomePageChart'),
     {
         type: 'line',
         data: {
-            labels: incomeDataForChart.map(row => row.month),
+            labels: labels,
             datasets: [
                 {
                     label: 'Income',
@@ -299,12 +502,12 @@ function rebuildArrayForChart(data, months) {
       }
   );
 
-  new Chart(
+incomeChart = new Chart(
     document.getElementById('incomeChart'),
     {
         type: 'line',
         data: {
-            labels: incomeDataForChart.map(row => row.month),
+            labels: labels,
             datasets: [
                 {
                     label: 'Income',
@@ -321,7 +524,9 @@ function rebuildArrayForChart(data, months) {
             }
       }
   );
-  })();
+}
+return 
+  };
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
 
@@ -336,42 +541,52 @@ function switchOnClick() {
 document.getElementById('expButton').expButtonF = () => {
     currentPageIndex = 2;  //temporarily set to 1-1 while waiting for pages
     switchOnClick();
+    updateAll();
 }
 document.getElementById('expenseIconO').expButtonF = () => {
     currentPageIndex = 2;
     switchOnClick();
+    updateAll();
 }
 document.getElementById('incomeButton').incomeButtonF = () => {
     currentPageIndex = 1;
     switchOnClick();
+    updateAll();
 }
 document.getElementById('incomeIconO').incomeButtonF = () => {
     currentPageIndex = 1;
     switchOnClick();
+    updateAll();
 }
 document.getElementById('dashButton').dashButtonF = () => {
     currentPageIndex = 0;
     switchOnClick();
+    updateAll();
 }
 document.getElementById('dashIconO').dashButtonF = () => {
     currentPageIndex = 0;
     switchOnClick();
+    updateAll();
 }
 document.getElementById('settingsButton').settingsButtonF = () => {
     currentPageIndex = 4;
     switchOnClick();
+    updateAll();
 }
 document.getElementById('settingsIconO').settingsButtonF = () => {
     currentPageIndex = 4;
     switchOnClick();
+    updateAll();
 }
 document.getElementById('invButton').invButtonF = () => {
     currentPageIndex = 3;
     switchOnClick();
+    updateAll();
 }
 document.getElementById('investIconO').invButtonF = () => {
     currentPageIndex = 3;
     switchOnClick();
+    updateAll();
 }
 
 function calendarToUnixTime(dateString, timeString) {
@@ -423,6 +638,7 @@ document.getElementById('expenseSubmitBtn').submitExpense = () => {
         document.getElementById('expenseTimeIn').value = '';
         document.getElementById('expenseTypeIn').value = 'One time expense';
     }
+    updateAll();
 };
 document.getElementById('incomeSubmitBtn').submitIncome = () => {
   let error = false;
@@ -452,11 +668,13 @@ document.getElementById('incomeSubmitBtn').submitIncome = () => {
       document.getElementById('incomeTimeIn').value = '';
       document.getElementById('incomeTypeIn').value = 'One time income';
   }
+  updateAll();
 };
 document.getElementById('investmentSubmitBtn').submitInvestment = () => {
     // get the values from the form
     ipcRenderer.send('db-investment-insert', {ticker, amount, date});
     console.log('investment submitted');
+    updateAll();
 };
 document.getElementById('incomeChartLengthSubmit').submitSettings = () => {
     // get the values from the form
@@ -464,11 +682,5 @@ document.getElementById('incomeChartLengthSubmit').submitSettings = () => {
     let value = document.getElementById('incomeChartLengthIn').value;
     ipcRenderer.send('db-setting-update', {name, value});
     console.log('settings submitted');
-};
-document.getElementById('expensesChartLengthSubmit').submitSettings = () => {
-  // get the values from the form
-  let name = 'expenseChartHLength';
-  let value = document.getElementById('expenseChartLengthIn').value;
-  ipcRenderer.send('db-setting-update', {name, value});
-  console.log('settings submitted');
+    updateAll();
 };
