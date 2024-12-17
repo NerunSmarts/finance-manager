@@ -19,7 +19,7 @@
           <div class="income-block">
             <center><p class="heading">Total Income:</p></center>
             <canvas id = "dashboardChart"></canvas>
-            <p class="paragraph" id="incPY">Income per year:</p>
+            <p class="paragraph" id="incPY">Income (YTD):</p>
             <p class="paragraph" id="incPM">Income per month:</p>
             <p class="paragraph" id="incPW">Income per week:</p>
             <p class="paragraph" id="incPD">Income per day:</p>
@@ -28,10 +28,10 @@
           <div class = "expenses-block">
             <center><p class="heading">Total Expenses:</p></center>
             <canvas id ="expenseChart"></canvas>
-            <p class="paragraph">Monthly expenses (recurring):</p>
-            <p class="paragraph">Yearly expenses (recurring):</p>
-            <p class="paragraph">Average expenses per month:</p>
-            <p class="paragraph">Average expenses per day:</p>
+            <p class="paragraph" id="expRM">Monthly expenses (recurring):</p>
+            <p class="paragraph" id="expRY">Yearly expenses (recurring):</p>
+            <p class="paragraph" id="expPM">Average expenses per month:</p>
+            <p class="paragraph" id="expPD">Average expenses per day:</p>
           </div>
 
           <div class="investment-block" style="margin-bottom: 100px;">
@@ -51,14 +51,14 @@
       <div class="addincome-pg" id = "addincome-pg">
         <img>
         <p class="heading">Income List</p>
-        <select class="uicontrols" name="sometext" size="5" style="width: 40%;">
+        <select class="uicontrols" name="sometext" size="5" style="width: 40%;" id="incomeList">
           <option>Test</option>
         </select>
         <br>
         <br>
 
         <button class="uicontrols" onclick="document.getElementById('incdialog').style.display = 'block';">Add income</button>
-        <button class="uicontrols">Delete income</button>
+        <button class="uicontrols" id="deleteIncomeBtn" onclick="this.deleteSelectedIncome()">Delete income</button>
         <div class="income-dialog" id="incdialog">
           <p class="paragraph">Income name:</p>
           <input id="incomeNameIn"></input>
@@ -96,14 +96,14 @@
       <div class="addexpenses-pg" id = "addexpenses-pg">
         <img>
         <p class="heading">Expenses List</p>
-     <select class="uicontrols" name="sometext" size="5" style="width: 40%;">
+     <select class="uicontrols" name="sometext" size="5" style="width: 40%;" id="expensesList">
           <option>Test</option>
         </select>
         <br>
         <br>
 
         <button class="uicontrols" onclick="document.getElementById('expdialog').style.display = 'block';">Add expense</button>
-        <button class="uicontrols">Delete expense</button>
+        <button class="uicontrols" id="deleteExpenseBtn" onclick="this.deleteSelectedExpense()">Delete expense</button>
         <div class="expense-dialog" id="expdialog">
           <p class="paragraph">Expense name:</p>
           <input id="expenseNameIn"></input>

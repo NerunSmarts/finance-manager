@@ -3,6 +3,7 @@ const path = require('node:path');
 const fs = require('fs');
 const { open } = require('sqlite')
 const dbPath = app.getPath('userData')
+ipcMain.setMaxListeners(20);
 import icon from './icons/fmlogo.svg';
 //const pythonShell = require('python-shell');
 
@@ -65,7 +66,6 @@ app.whenReady().then(() => {
       });
       ipcMain.on('db-incomerecent-request', (event, args) => {
           DBHandler.getMostRecentIncome(db, args).then((data) => {
-              console.log(data);
               window.webContents.send('db-incomerecent-reply', data);
           });
       })
@@ -81,13 +81,11 @@ app.whenReady().then(() => {
       })
       ipcMain.on('db-expense-request', (event, args) => {
           DBHandler.getExpense(db, args).then((data) => {
-              console.log(data);
               window.webContents.send('db-expense-reply', data);
           });
       })
       ipcMain.on('db-investment-request', (event, args) => {
           DBHandler.getInvestment(db, args).then((data) => {
-              console.log(data);
               window.webContents.send('db-investment-reply', data);
           });
       })
@@ -96,19 +94,16 @@ app.whenReady().then(() => {
             console.log("settings fixed (if they were broken)");
           });
           DBHandler.getSettings(db).then((data) => {
-              console.log(data);
               window.webContents.send('db-settings-reply', data);
               window.webContents.send('db-settings-go', 'stupid ass timing hack');
           });
       });
       ipcMain.on('db-expense-insert', (event, args) => {
-          console.log(args);
           DBHandler.insertExpense(db, args.name, args.amount, args.date, args.type).then((data) => {
               window.webContents.send('db-expense-insert-reply', data);
           });
       });
       ipcMain.on('db-income-insert', (event, args) => {
-          console.log(args);
           DBHandler.insertIncome(db, args.name, args.amount, args.date, args.type).then((data) => {
               window.webContents.send('db-income-insert-reply', data);
           });
@@ -133,6 +128,22 @@ app.whenReady().then(() => {
       ipcMain.on('db-expenseall-request', (event, args) => {
           DBHandler.getAllExpenses(db).then((data) => {
               window.webContents.send('db-expenseall-reply', data);
+          });
+      });
+      ipcMain.on('db-incomeall-request', (event, args) => {
+          DBHandler.getAllIncome(db).then((data) => {
+              window.webContents.send('db-incomeall-reply', data);
+          });
+      });
+      ipcMain.on('db-income-delete', (event, args) => {
+          DBHandler.deleteIncome(db, args).then((data) => {
+              window.webContents.send('db-income-delete-reply', data);
+          });
+      });
+      ipcMain.on('db-expense-delete', (event, args) => {
+        console.log(args);
+          DBHandler.deleteExpense(db, args).then((data) => {
+              window.webContents.send('db-expense-delete-reply', data);
           });
       });
     });

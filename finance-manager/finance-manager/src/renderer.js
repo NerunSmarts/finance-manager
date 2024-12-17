@@ -17,7 +17,7 @@ import fmlogo from './icons/fmlogo.svg';
 import  Chart  from 'chart.js/auto';
 const { ipcRenderer } = require('electron')
 Chart.defaults.color = 'white';
-
+ipcRenderer.setMaxListeners(15);
 
 var currentPageIndex = 0;
 var pageList = ['dashboard-pg', 'addincome-pg', 'addexpenses-pg', "investments-pg", "settings-pg"]; // final will be ['addincome-pg', 'addexpenses-pg', 'dashboard-pg', 'investments-pg', 'settings-pg']
@@ -176,7 +176,6 @@ function rebuildArrayForWeekDashChart(expenseData, incomeData, weeks) {
     }
   }
 
-  console.log('Weekly Data:', weeklyData);
   return weeklyData;
 }
 
@@ -186,7 +185,6 @@ function rebuildArrayForMonthDashChart(expenseData, incomeData, months) {
     gains: 0,
     losses: 0
   }));
-  console.log(expenseData);
   for (let income in incomeData) {
     let incomeDate = new Date(incomeData[income].date * 1000);
     let incomeMonth = incomeDate.toLocaleString('default', { month: 'long' });
@@ -204,7 +202,6 @@ function rebuildArrayForMonthDashChart(expenseData, incomeData, months) {
       monthData.losses -= expenseData[expense].amount;
     }
   }
-  console.log(monthlyData);
   return monthlyData;
 }
 
@@ -255,7 +252,6 @@ function rebuildArrayForWeekChart(data, weeks) {
     }
   }
 
-  console.log('Weekly Data:', weeklyData);
   return weeklyData;
 }
 function rebuildArrayForMonthChart(data, months) {
@@ -293,7 +289,35 @@ function rebuildArrayForYearChart(data, years) {
 
   return yearlyData;
 }
+function calculateTimesSinceOldestTimestamp(stepSize, data) {
+  let oldestTimestamp = Math.min(...data.map(item => item.date));
+  let count = Math.floor((Date.now() / 1000 - oldestTimestamp) / stepSize);
+  return count;
+}
 
+function findAverageForTime(data, range, stepSize) {
+  let total = 0;
+  let count = calculateTimesSinceOldestTimestamp(stepSize, data);
+  for (let item in data) {
+    if (data[item].date >= range) {
+      total += data[item].amount;
+    }
+  }
+  if (count === 0) {
+    count = 1;
+  }
+  return Math.ceil((total / count) * 100) / 100;
+}
+
+function generateListHTML(data, idStringPrefix) {
+  let listHTML = '';
+  for (let item in data) {
+    let date = new Date(data[item].date * 1000);
+    let dateString = date.toLocaleString();
+    listHTML += `<option id="${idStringPrefix+item}">${data[item].name} - $${data[item].amount} - ${dateString}</option>`;
+  }
+  return listHTML;
+}
 let dashChart, expenseChart, incomeChart, expensePageChart, incomePageChart;
 let labels, incomeDataForChart, expenseDataForChart, combinedData;
 let ready = false;
@@ -312,15 +336,12 @@ async function updateAll() {
       });
   });
 
-  console.log(settingsData);
   document.getElementById('incomeChartLengthIn').value = incomeRange;
-  console.log(incomeRange, expenseRange, investmentRange);
 
   // Request recent data
   let recentIncomeData = new Promise((resolve) => {
       ipcRenderer.send('db-incomerecent-request', calculateTimesToGet(incomeRange));
       ipcRenderer.on('db-incomerecent-reply', (event, args) => {
-          console.log(args);
           resolve(args);
       });
   });
@@ -328,7 +349,6 @@ async function updateAll() {
   let recentExpenseData = new Promise((resolve) => {
       ipcRenderer.send('db-expenserecent-request', calculateTimesToGet(incomeRange));
       ipcRenderer.on('db-expenserecent-reply', (event, args) => {
-          console.log(args);
           resolve(args);
       });
   });
@@ -336,13 +356,26 @@ async function updateAll() {
   let recentInvestmentData = new Promise((resolve) => {
       ipcRenderer.send('db-investmentrecent-request', calculateTimesToGet(incomeRange));
       ipcRenderer.on('db-investmentrecent-reply', (event, args) => {
-          console.log(args);
           resolve(args);
       });
   });
 
+  let allIncomeData = new Promise((resolve) => {
+      ipcRenderer.send('db-incomeall-request', 'get all');
+      ipcRenderer.on('db-incomeall-reply', (event, args) => {
+        resolve(args);
+      });
+  });
+
+  let allExpenseData = new Promise((resolve) => {
+      ipcRenderer.send('db-expenseall-request', 'get all');
+      ipcRenderer.on('db-expenseall-reply', (event, args) => {
+        resolve(args);
+      });
+  });
+
   // Wait for all data to be received
-  let [incomeData, expenseData, investmentData] = await Promise.all([recentIncomeData, recentExpenseData, recentInvestmentData]);
+  let [incomeData, expenseData, investmentData, fullIncomeData, fullExpenseData] = await Promise.all([recentIncomeData, recentExpenseData, recentInvestmentData, allIncomeData, allExpenseData]);
 
   console.log('All data received');
   let oldestTimestamp = Math.min(calculateTimesToGet(incomeRange), calculateTimesToGet(expenseRange), calculateTimesToGet(investmentRange));
@@ -370,6 +403,12 @@ async function updateAll() {
     labels = weeksToShow.map(row => row.week);
   }
   ready = true;
+  document.getElementById('incPY').innerHTML = 'Income (last 365 days): ' + findAverageForTime(fullIncomeData, (Date.now() / 1000) - 31536000, 31536000);
+  document.getElementById('incPM').innerHTML = 'Income per month: ' + findAverageForTime(fullIncomeData, (Date.now() / 1000) - (2592000 * 5), 2592000);
+  document.getElementById('incPW').innerHTML = 'Income per week: ' + findAverageForTime(fullIncomeData, (Date.now() / 1000) - (604800 * 5), 604800);
+  document.getElementById('incPD').innerHTML = 'Income per day: ' + findAverageForTime(fullIncomeData, (Date.now() / 1000) - (86400 * 30), 86400);
+  document.getElementById('incomeList').innerHTML = generateListHTML(fullIncomeData, 'incomeList');
+  document.getElementById('expensesList').innerHTML = generateListHTML(fullExpenseData, 'expensesList');
   try {
   dashChart.data.labels = labels;
   dashChart.data.datasets[0].data = combinedData.map(row => row.gains);
@@ -605,7 +644,6 @@ function calendarToUnixTime(dateString, timeString) {
     if (isNaN(unixTime)) {
       throw new Error('Invalid date or time');
     } else {
-      console.log(unixTime);
       return unixTime;
     }
 }
@@ -683,4 +721,43 @@ document.getElementById('incomeChartLengthSubmit').submitSettings = () => {
     ipcRenderer.send('db-setting-update', {name, value});
     console.log('settings submitted');
     updateAll();
+};
+let incomeClicked = false;
+let expenseClicked = false;
+
+document.getElementById('deleteIncomeBtn').deleteSelectedIncome = () => {
+    if (incomeClicked) {
+        let id = document.getElementById('incomeList').selectedIndex;
+        id++; console.log(id);
+        ipcRenderer.send('db-income-delete', id);
+        console.log('income deleted');
+        ipcRenderer.on('db-income-delete-reply', (event, args) => {
+          incomeClicked = false;
+          document.getElementById('deleteIncomeBtn').innerHTML = 'Delete income';
+          document.getElementById('deleteIncomeBtn').style.backgroundColor = '#04AA6D';
+          updateAll();
+        });
+    } else {
+        incomeClicked = true;
+        document.getElementById('deleteIncomeBtn').innerHTML = 'Confirm';
+        document.getElementById('deleteIncomeBtn').style.backgroundColor = 'red';
+    }
+};
+document.getElementById('deleteExpenseBtn').deleteSelectedExpense = () => {
+    if (expenseClicked) {
+      let id = document.getElementById('expensesList').selectedIndex;
+      id++; console.log(id);
+        ipcRenderer.send('db-expense-delete', id);
+        console.log('expense deleted');
+        ipcRenderer.on('db-expense-delete-reply', (event, args) => {
+          expenseClicked = false;
+          document.getElementById('deleteExpenseBtn').innerHTML = 'Delete expense';
+          document.getElementById('deleteExpenseBtn').style.backgroundColor = '#04AA6D';
+          updateAll();
+        });
+    } else {
+        expenseClicked = true;
+        document.getElementById('deleteExpenseBtn').innerHTML = 'Confirm';
+        document.getElementById('deleteExpenseBtn').style.backgroundColor = 'red';
+    }
 };
