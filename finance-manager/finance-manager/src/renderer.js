@@ -13,6 +13,9 @@ import investIcon from './icons/stats-chart-sharp.svg';
 import expenseIcon from './icons/trending-down-sharp.svg';
 import settingsIcon from './icons/settings-sharp.svg';
 import fmlogo from './icons/fmlogo.svg';
+import expensesLogo from './icons/expenses.png';
+import incomeLogo from './icons/income.png';
+import investmentsLogo from './icons/investments.png';
 
 import  Chart  from 'chart.js/auto';
 const { ipcRenderer } = require('electron')
@@ -34,6 +37,9 @@ document.getElementById('invButton').innerHTML = `<img src="${investIcon}" class
 document.getElementById('expButton').innerHTML = `<img src="${expenseIcon}" class="nav-icon" id = "expenseIconO" onclick = "this.expButtonF()"></img><a>Expenses</a>`;
 document.getElementById('settingsButton').innerHTML = `<img src="${settingsIcon}" class="nav-icon" id = "settingsIconO" onclick = "this.settingsButtonF()"></img><a>Settings</a>`;
 document.getElementById('fmlogodisplay').innerHTML = `<img src="${fmlogo}" class="fm-logo" id = "fmlogoimg"></src>`;
+document.getElementById('expenseLogo').innerHTML = `<img src="${expensesLogo}" class="expenses-logo" id = "expensesLogo"></src>`;
+document.getElementById('incomeLogo').innerHTML = `<img src="${incomeLogo}" class="income-logo" id = "incomeLogo"></src>`;
+document.getElementById('investmentLogo').innerHTML = `<img src="${investmentsLogo}" class="investments-logo" id = "investmentsLogo"></src>`;
 
 //initialize a page to display
 for (let i in pageList) {
