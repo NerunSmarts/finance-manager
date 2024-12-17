@@ -49,13 +49,13 @@ export async function fixSettings(db) {
         await db.run('INSERT INTO settings (name, value) VALUES (?, ?)', ['stockAPIKey', 'null']);
     }
     if (!settingNames.includes('incomeChartHLength')) {
-        await db.run('INSERT INTO settings (name, value) VALUES (?, ?)', ['incomeChartHLength', '1 month']);
+        await db.run('INSERT INTO settings (name, value) VALUES (?, ?)', ['incomeChartHLength', '3 months']);
     }
     if (!settingNames.includes('expenseChartHLength')) {
-        await db.run('INSERT INTO settings (name, value) VALUES (?, ?)', ['expenseChartHLength', '1 month']);
+        await db.run('INSERT INTO settings (name, value) VALUES (?, ?)', ['expenseChartHLength', '3 months']);
     }
     if (!settingNames.includes('investmentChartHLength')) {
-        await db.run('INSERT INTO settings (name, value) VALUES (?, ?)', ['investmentChartHLength', '1 month']);
+        await db.run('INSERT INTO settings (name, value) VALUES (?, ?)', ['investmentChartHLength', '3 months']);
     }
 }
 
@@ -112,10 +112,19 @@ export async function getSetting(db, id) {
 }
 
 export async function deleteExpense(db, id) {
+    console.log(id);
+    console.log(await db.run('CREATE TABLE temp_expenses AS SELECT ROW_NUMBER() OVER (ORDER BY id) AS id, name, amount, date, type FROM expenses'));
+    await db.run('DROP TABLE expenses');
+    await db.run('ALTER TABLE temp_expenses RENAME TO expenses');
     return await db.run('DELETE FROM expenses WHERE id = ?', [id]);
+
 }
 
 export async function deleteIncome(db, id) {
+    console.log(id);
+    console.log(await db.run('CREATE TABLE temp_income AS SELECT ROW_NUMBER() OVER (ORDER BY id) AS id, name, amount, date, type FROM income'));
+    await db.run('DROP TABLE income');
+    await db.run('ALTER TABLE temp_income RENAME TO income');
     return await db.run('DELETE FROM income WHERE id = ?', [id]);
 }
 

@@ -20,7 +20,7 @@ import investmentsLogo from './icons/investments.png';
 import  Chart  from 'chart.js/auto';
 const { ipcRenderer } = require('electron')
 Chart.defaults.color = 'white';
-ipcRenderer.setMaxListeners(15);
+ipcRenderer.setMaxListeners(30);
 
 var currentPageIndex = 0;
 var pageList = ['dashboard-pg', 'addincome-pg', 'addexpenses-pg', "investments-pg", "settings-pg"]; // final will be ['addincome-pg', 'addexpenses-pg', 'dashboard-pg', 'investments-pg', 'settings-pg']

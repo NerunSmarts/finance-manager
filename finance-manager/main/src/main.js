@@ -117,6 +117,7 @@ app.whenReady().then(() => {
           if (args.name = 'incomeChartHLength') {
               DBHandler.updateSetting(db, 1, args.name, args.value).then((data) => {
                   window.webContents.send('db-setting-update-reply', data);
+                  console.log(data);
               });
           };
           if (args.name = 'expenseChartHLength') {
@@ -144,6 +145,7 @@ app.whenReady().then(() => {
         console.log(args);
           DBHandler.deleteExpense(db, args).then((data) => {
               window.webContents.send('db-expense-delete-reply', data);
+              console.log(data);
           });
       });
     });
